@@ -1,0 +1,15 @@
+import React, { useState, useEffect } from 'react';
+import { Transaction, Language } from './types';
+import { Dashboard } from './components/Dashboard';
+import { TransactionList } from './components/TransactionList';
+import { TransactionForm } from './components/TransactionForm';
+import { LedgerReport } from './components/LedgerReport';
+import { MonthlyBalanceView } from './components/MonthlyBalanceView';
+import { loadTransactions, saveTransactions, addTransaction, updateTransaction, deleteTransaction } from './utils/storage';
+import { sampleTransactions } from './data/sampleData';
+import { translations } from './utils/translations';
+import './index.css';
+
+type View = 'dashboard' | 'transactions' | 'reports' | 'monthly';
+
+function App() {

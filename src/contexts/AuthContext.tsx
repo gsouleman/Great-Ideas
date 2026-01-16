@@ -1,0 +1,168 @@
+import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+import { User, AuthSession, LoginCredentials, ChangePasswordRequest } from '../types/auth';
+import { getCurrentSession, saveSession, clearSession, validateLogin, changePassword, generate2FACode, validate2FACode } from '../utils/authStorage';
+
+interface AuthContextType {
+    currentUser: User | null;
+    session: AuthSession | null;
+    login: (credentials: LoginCredentials) => Promise<{ success: boolean; requires2FA?: boolean; userId?: string; email?: string; error?: string }>;
+    logout: () => void;
+    verify2FA: (userId: string, code: string) => Promise<{ success: boolean; user?: User; error?: string }>;
+    updatePassword: (request: ChangePasswordRequest) => Promise<{ success: boolean; error?: string }>;
+    isAuthenticated: boolean;
+    hasPermission: (permission: string) => boolean;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const useAuth = () => {
+    const context = useContext(AuthContext);
+    if (!context) {
+        throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
+};
+
+interface AuthProviderProps {
+    children: ReactNode;
+}
+
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+    const [session, setSession] = useState<AuthSession | null>(null);
+    const [currentUser, setCurrentUser] = useState<User | null>(null);
+
+    useEffect(() => {
+        // Load session on mount
+        const existingSession = getCurrentSession();
+        if (existingSession) {
+            setSession(existingSession);
+
+            // Load the user data from the session
+            const loadUser = async () => {
+                const { getUserById } = await import('../utils/authStorage');
+                const user = getUserById(existingSession.userId);
+                if (user) {
+                    setCurrentUser(user);
+                }
+            };
+            loadUser();
+        }
+    }, []);
+
+    const login = async (credentials: LoginCredentials): Promise<{ success: boolean; requires2FA?: boolean; userId?: string; email?: string; error?: string }> => {
+        const result = validateLogin(credentials);
+
+        if (!result.success) {
+            return { success: false, error: result.error };
+        }
+
+        if (result.requires2FA && result.user) {
+            // Generate 2FA code
+            const code = generate2FACode(result.user.id, result.user.email);
+            console.log(`[2FA SIMULATION] Code for ${result.user.email}: ${code}`);
+            return {
+                success: true,
+                requires2FA: true,
+                userId: result.user.id,
+                email: result.user.email
+            };
+        }
+
+        // No 2FA required - create session
+        if (result.user) {
+            const newSession: AuthSession = {
+                userId: result.user.id,
+                username: result.user.username,
+                memberName: result.user.memberName,
+                role: result.user.role,
+                loginTime: new Date().toISOString()
+            };
+
+            saveSession(newSession);
+            setSession(newSession);
+            setCurrentUser(result.user);
+
+            return { success: true };
+        }
+
+        return { success: false, error: 'Unknown error occurred' };
+    };
+
+    const verify2FA = async (userId: string, code: string): Promise<{ success: boolean; user?: User; error?: string }> => {
+        const result = validate2FACode(userId, code);
+
+        if (!result.success) {
+            return { success: false, error: result.error };
+        }
+
+        // 2FA successful - create session
+        const { getUserById } = await import('../utils/authStorage');
+        const user = getUserById(userId);
+
+        if (!user) {
+            return { success: false, error: 'User not found' };
+        }
+
+        const newSession: AuthSession = {
+            userId: user.id,
+            username: user.username,
+            memberName: user.memberName,
+            role: user.role,
+            loginTime: new Date().toISOString()
+        };
+
+        saveSession(newSession);
+        setSession(newSession);
+        setCurrentUser(user);
+
+        return { success: true, user };
+    };
+
+    const logout = () => {
+        clearSession();
+        setSession(null);
+        setCurrentUser(null);
+    };
+
+    const updatePassword = async (request: ChangePasswordRequest): Promise<{ success: boolean; error?: string }> => {
+        const result = changePassword(request);
+
+        if (result.success && currentUser?.id === request.userId) {
+            // Reload user data
+            const { getUserById } = await import('../utils/authStorage');
+            const updatedUser = getUserById(request.userId);
+            if (updatedUser) {
+                setCurrentUser(updatedUser);
+            }
+        }
+
+        return result;
+    };
+
+    const hasPermission = (permission: string): boolean => {
+        if (!currentUser) return false;
+
+        const rolePermissions = {
+            admin: ['all'],
+            excom: ['view_financial', 'view_assets', 'manage_users', 'view_admin'],
+            member: ['view_financial', 'view_assets'],
+            guest: ['view_financial']
+        };
+
+        const permissions = rolePermissions[currentUser.role] || [];
+        return permissions.includes('all') || permissions.includes(permission);
+    };
+
+    const value: AuthContextType = {
+        currentUser,
+        session,
+        login,
+        logout,
+        verify2FA,
+        updatePassword,
+        isAuthenticated: !!session,
+        hasPermission
+    };
+
+    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+};
