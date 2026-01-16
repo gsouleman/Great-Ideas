@@ -1,4 +1,4 @@
-```typescript
+
 import { Request, Response } from 'express';
 import { PrismaClient, Role } from '@prisma/client';
 
