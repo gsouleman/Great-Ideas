@@ -30,6 +30,7 @@ app.get('/health', (req, res) => {
 // Auth Routes
 app.post('/api/auth/login', authController.login);
 app.post('/api/auth/register', authController.register);
+app.post('/api/auth/change-password', authController.changePassword);
 
 // API Routes
 app.get('/api/users', async (req, res) => {

@@ -150,18 +150,24 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     };
 
     const updatePassword = async (request: ChangePasswordRequest): Promise<{ success: boolean; error?: string }> => {
-        const result = changePassword(request);
+        try {
+            const { authApi } = await import('../utils/api');
+            const result = await authApi.changePassword(request);
 
-        if (result.success && currentUser?.id === request.userId) {
-            // Reload user data
-            const { getUserById } = await import('../utils/authStorage');
-            const updatedUser = getUserById(request.userId);
-            if (updatedUser) {
-                setCurrentUser(updatedUser);
+            if (result.success && currentUser?.id === request.userId) {
+                // Reload user data via API
+                const updatedUser = await authApi.getUser(request.userId);
+                if (updatedUser) {
+                    setCurrentUser(updatedUser);
+                }
+                return { success: true };
             }
+            return { success: false, error: result.error || 'Failed to update password' };
+        } catch (error: any) {
+            console.error('Update password error:', error);
+            const msg = error.response?.data?.error || 'Connection to server failed';
+            return { success: false, error: msg };
         }
-
-        return result;
     };
 
     const hasPermission = (permission: string): boolean => {

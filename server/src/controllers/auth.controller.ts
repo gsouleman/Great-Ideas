@@ -86,6 +86,7 @@ export const register = async (req: Request, res: Response) => {
             }
         });
 
+
         const { passwordHash, ...userWithoutPassword } = newUser;
 
         res.status(201).json({
@@ -95,6 +96,58 @@ export const register = async (req: Request, res: Response) => {
 
     } catch (error) {
         console.error('Registration error:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+export const changePassword = async (req: Request, res: Response) => {
+    try {
+        const { userId, currentPassword, newPassword } = req.body;
+
+        if (!userId || !currentPassword || !newPassword) {
+            res.status(400).json({ error: 'All fields are required' });
+            return;
+        }
+
+        const user = await prisma.user.findUnique({
+            where: { id: userId }
+        });
+
+        if (!user) {
+            res.status(404).json({ error: 'User not found' });
+            return;
+        }
+
+        // Verify current password
+        if (user.passwordHash !== currentPassword) {
+            res.status(401).json({ error: 'Current password is incorrect' });
+            return;
+        }
+
+        // Validate new password (simple length check)
+        if (newPassword.length < 6) {
+            res.status(400).json({ error: 'New password must be at least 6 characters' });
+            return;
+        }
+
+        if (newPassword === currentPassword) {
+            res.status(400).json({ error: 'New password must be different from current password' });
+            return;
+        }
+
+        // Update password
+        await prisma.user.update({
+            where: { id: userId },
+            data: {
+                passwordHash: newPassword, // TODO: Hash this
+                mustChangePassword: false
+            }
+        });
+
+        res.json({ success: true });
+
+    } catch (error) {
+        console.error('Change password error:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 };

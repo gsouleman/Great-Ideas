@@ -27,6 +27,10 @@ export const authApi = {
         const users = response.data;
         return users.find((u: any) => u.id === userId);
     },
+    changePassword: async (data: any) => {
+        const response = await api.post('/api/auth/change-password', data);
+        return response.data;
+    },
     // Add other auth methods as needed
 };
 
