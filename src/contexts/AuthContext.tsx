@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 import { User, AuthSession, LoginCredentials, ChangePasswordRequest } from '../types/auth';
-import { getCurrentSession, saveSession, clearSession, changePassword, generate2FACode, validate2FACode } from '../utils/authStorage';
+import { getCurrentSession, saveSession, clearSession, generate2FACode, validate2FACode } from '../utils/authStorage';
 
 interface AuthContextType {
     currentUser: User | null;
