@@ -1,0 +1,65 @@
+// This is your Prisma schema file
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String   @id @default(uuid())
+  username          String   @unique
+  memberName        String
+  memberId          String?
+  email             String   @unique
+  role              Role
+  passwordHash      String
+  mustChangePassword Boolean @default(true)
+  is2FAEnabled      Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  lastLogin         DateTime?
+  
+  @@map("users")
+}
+
+enum Role {
+  ADMIN
+  EXCOM
+  MEMBER
+  GUEST
+}
+
+model Transaction {
+  id          String   @id @default(uuid())
+  date        DateTime
+  description String
+  amount      Float
+  type        TransactionType
+  category    String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("transactions")
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+model Asset {
+  id          String   @id @default(uuid())
+  name        String
+  type        String
+  value       Float
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("assets")
+}
