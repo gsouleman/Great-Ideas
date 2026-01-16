@@ -1,5 +1,6 @@
+/// <reference types="vite/client" />
 import axios from 'axios';
-import { LoginCredentials, User } from '../types/auth';
+import { LoginCredentials } from '../types/auth';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
