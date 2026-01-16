@@ -10,11 +10,12 @@
     "start": "node ./node_modules/vite/bin/vite.js preview --host 0.0.0.0 --port $PORT"
   },
   "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "axios": "^1.13.2",
     "date-fns": "^3.0.6",
     "jspdf": "^2.5.1",
-    "jspdf-autotable": "^3.8.2"
+    "jspdf-autotable": "^3.8.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",

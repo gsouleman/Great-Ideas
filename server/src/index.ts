@@ -13,10 +13,18 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
+import * as authController from './controllers/auth.controller';
+
+// ... middleware setup ...
+
 // Health check
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', message: 'Server is running' });
 });
+
+// Auth Routes
+app.post('/api/auth/login', authController.login);
+app.post('/api/auth/register', authController.register);
 
 // API Routes
 app.get('/api/users', async (req, res) => {

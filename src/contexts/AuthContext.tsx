@@ -50,42 +50,53 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }, []);
 
     const login = async (credentials: LoginCredentials): Promise<{ success: boolean; requires2FA?: boolean; userId?: string; email?: string; error?: string }> => {
-        const result = validateLogin(credentials);
+        try {
+            // Import api dynamically to avoid circular dependencies if any
+            const { authApi } = await import('../utils/api');
+            const result = await authApi.login(credentials);
 
-        if (!result.success) {
-            return { success: false, error: result.error };
+            if (!result.success) {
+                return { success: false, error: result.error || 'Login failed' };
+            }
+
+            // Handle 2FA
+            if (result.requires2FA) {
+                // Generate 2FA code (simulated for now, should typically be server-side triggered)
+                // For V1, we simulate generation on client if server flags it
+                const code = generate2FACode(result.userId, result.email);
+                console.log(`[2FA SIMULATION] Code for ${result.email}: ${code}`);
+                return {
+                    success: true,
+                    requires2FA: true,
+                    userId: result.userId,
+                    email: result.email
+                };
+            }
+
+            // No 2FA required - create session
+            if (result.user) {
+                const newSession: AuthSession = {
+                    userId: result.user.id,
+                    username: result.user.username,
+                    memberName: result.user.memberName,
+                    role: result.user.role,
+                    loginTime: new Date().toISOString()
+                };
+
+                saveSession(newSession);
+                setSession(newSession);
+                setCurrentUser(result.user);
+
+                return { success: true };
+            }
+
+            return { success: false, error: 'Unknown response from server' };
+        } catch (error: any) {
+            console.error('Login error:', error);
+            // Fallback error message
+            const msg = error.response?.data?.error || 'Connection to server failed';
+            return { success: false, error: msg };
         }
-
-        if (result.requires2FA && result.user) {
-            // Generate 2FA code
-            const code = generate2FACode(result.user.id, result.user.email);
-            console.log(`[2FA SIMULATION] Code for ${result.user.email}: ${code}`);
-            return {
-                success: true,
-                requires2FA: true,
-                userId: result.user.id,
-                email: result.user.email
-            };
-        }
-
-        // No 2FA required - create session
-        if (result.user) {
-            const newSession: AuthSession = {
-                userId: result.user.id,
-                username: result.user.username,
-                memberName: result.user.memberName,
-                role: result.user.role,
-                loginTime: new Date().toISOString()
-            };
-
-            saveSession(newSession);
-            setSession(newSession);
-            setCurrentUser(result.user);
-
-            return { success: true };
-        }
-
-        return { success: false, error: 'Unknown error occurred' };
     };
 
     const verify2FA = async (userId: string, code: string): Promise<{ success: boolean; user?: User; error?: string }> => {
