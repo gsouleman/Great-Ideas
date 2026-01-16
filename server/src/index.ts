@@ -17,6 +17,11 @@ import * as authController from './controllers/auth.controller';
 
 // ... middleware setup ...
 
+// Root route
+app.get('/', (req, res) => {
+    res.json({ message: 'Great Ideas API is running 🚀' });
+});
+
 // Health check
 app.get('/health', (req, res) => {
     res.json({ status: 'ok', message: 'Server is running' });
