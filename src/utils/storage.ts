@@ -1,6 +1,6 @@
 import { Transaction } from '../types';
 
-const STORAGE_KEY = 'great_ideas_transactions_v4';
+const STORAGE_KEY = 'great_ideas_transactions_v5';
 
 export const loadTransactions = (): Transaction[] => {
     try {
