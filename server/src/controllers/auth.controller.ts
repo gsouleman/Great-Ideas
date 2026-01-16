@@ -1,5 +1,6 @@
+```typescript
 import { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Role } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -55,8 +56,8 @@ export const register = async (req: Request, res: Response) => {
     try {
         const { username, password, email, fullName } = req.body;
 
-        if (!username || !password || !email) {
-            res.status(400).json({ error: 'Username, password and email are required' });
+        if (!username || !password || !email || !fullName) {
+            res.status(400).json({ error: 'Username, password, email and fullName are required' });
             return;
         }
 
@@ -79,9 +80,9 @@ export const register = async (req: Request, res: Response) => {
                 username,
                 passwordHash: password, // TODO: Hash this
                 email,
-                fullName,
-                role: 'member', // Default role
-                status: 'pending' // Default status
+                memberName: fullName, // Map fullName to schema's memberName
+                role: Role.MEMBER, // Use Enum
+                // status field removed as it does not exist in schema
             }
         });
 
