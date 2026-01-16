@@ -20,6 +20,13 @@ export const authApi = {
         const response = await api.post('/api/auth/register', userData);
         return response.data;
     },
+    getUser: async (userId: string) => {
+        // For V1, we fetch all users and find the one we need since we don't have a direct ID endpoint yet
+        // TODO: Implement GET /api/users/:id on backend
+        const response = await api.get('/api/users');
+        const users = response.data;
+        return users.find((u: any) => u.id === userId);
+    },
     // Add other auth methods as needed
 };
 

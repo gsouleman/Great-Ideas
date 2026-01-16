@@ -37,12 +37,20 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         if (existingSession) {
             setSession(existingSession);
 
-            // Load the user data from the session
+            // Load the user data from the session via API
             const loadUser = async () => {
-                const { getUserById } = await import('../utils/authStorage');
-                const user = getUserById(existingSession.userId);
-                if (user) {
-                    setCurrentUser(user);
+                try {
+                    const { authApi } = await import('../utils/api');
+                    const user = await authApi.getUser(existingSession.userId);
+                    if (user) {
+                        setCurrentUser(user);
+                    } else {
+                        // If user not found on server (e.g. deleted), clear session
+                        clearSession();
+                        setSession(null);
+                    }
+                } catch (error) {
+                    console.error('Failed to load user session:', error);
                 }
             };
             loadUser();
@@ -107,26 +115,32 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         }
 
         // 2FA successful - create session
-        const { getUserById } = await import('../utils/authStorage');
-        const user = getUserById(userId);
+        // Fetch user from API instead of local storage
+        try {
+            const { authApi } = await import('../utils/api');
+            const user = await authApi.getUser(userId);
 
-        if (!user) {
-            return { success: false, error: 'User not found' };
+            if (!user) {
+                return { success: false, error: 'User not found' };
+            }
+
+            const newSession: AuthSession = {
+                userId: user.id,
+                username: user.username,
+                memberName: user.memberName,
+                role: user.role,
+                loginTime: new Date().toISOString()
+            };
+
+            saveSession(newSession);
+            setSession(newSession);
+            setCurrentUser(user);
+
+            return { success: true, user };
+        } catch (error) {
+            console.error('Verify 2FA error:', error);
+            return { success: false, error: 'Failed to retrieve user data' };
         }
-
-        const newSession: AuthSession = {
-            userId: user.id,
-            username: user.username,
-            memberName: user.memberName,
-            role: user.role,
-            loginTime: new Date().toISOString()
-        };
-
-        saveSession(newSession);
-        setSession(newSession);
-        setCurrentUser(user);
-
-        return { success: true, user };
     };
 
     const logout = () => {
