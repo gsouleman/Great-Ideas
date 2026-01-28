@@ -2,7 +2,8 @@ import { Transaction, Summary, LedgerFilter } from '../types';
 import { parseISO, isWithinInterval, getYear, getMonth } from 'date-fns';
 
 export const calculateSummary = (transactions: Transaction[]): Summary => {
-    const totalIncome = transactions
+    const txArray = Array.isArray(transactions) ? transactions : [];
+    const totalIncome = txArray
         .filter((t) => t.type === 'income')
         .reduce((sum, t) => sum + t.amount, 0);
 
@@ -22,11 +23,12 @@ export const filterTransactions = (
     transactions: Transaction[],
     filter: LedgerFilter
 ): Transaction[] => {
+    const txArray = Array.isArray(transactions) ? transactions : [];
     if (filter.periodType === 'all') {
-        return transactions;
+        return txArray;
     }
 
-    return transactions.filter((t) => {
+    return txArray.filter((t) => {
         const transDate = parseISO(t.date);
 
         if (filter.periodType === 'year' && filter.year) {

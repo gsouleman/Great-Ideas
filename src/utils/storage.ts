@@ -6,7 +6,8 @@ export const loadTransactions = (): Transaction[] => {
     try {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
-            return JSON.parse(stored);
+            const parsed = JSON.parse(stored);
+            return Array.isArray(parsed) ? parsed : [];
         }
     } catch (error) {
         console.error('Error loading transactions:', error);

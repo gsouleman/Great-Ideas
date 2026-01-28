@@ -11,15 +11,17 @@ interface MonthlyBalanceViewProps {
 export const MonthlyBalanceView: React.FC<MonthlyBalanceViewProps> = ({ transactions, language }) => {
     const [selectedYear, setSelectedYear] = useState<number | 'all'>('all');
 
+    const txArray = Array.isArray(transactions) ? transactions : [];
+
     // Get all unique years from transactions
     const years = Array.from(
-        new Set(transactions.map(t => new Date(t.date).getFullYear()))
+        new Set(txArray.map(t => new Date(t.date).getFullYear()))
     ).sort((a, b) => b - a);
 
     // Filter transactions by year if selected
     const filteredTransactions = selectedYear === 'all'
-        ? transactions
-        : transactions.filter(t => new Date(t.date).getFullYear() === selectedYear);
+        ? txArray
+        : txArray.filter(t => new Date(t.date).getFullYear() === selectedYear);
 
     // Calculate monthly balances
     const monthlyBalances = sortMonthlyBalances(
