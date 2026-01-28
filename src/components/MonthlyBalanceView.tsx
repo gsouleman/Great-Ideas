@@ -52,16 +52,16 @@ export const MonthlyBalanceView: React.FC<MonthlyBalanceViewProps> = ({ transact
             </div>
 
             {/* Monthly Balance Table */}
-            <div className="card">
+            <div className="card" style={{ padding: 0 }}>
                 <div className="table-container">
                     <table className="table">
                         <thead>
                             <tr>
                                 <th>{language === 'fr' ? 'Mois' : 'Month'}</th>
-                                <th className="text-right">{language === 'fr' ? 'Solde Ouverture' : 'Opening Balance'}</th>
+                                <th className="text-right">{language === 'fr' ? 'Ouverture' : 'Opening'}</th>
                                 <th className="text-right">{language === 'fr' ? 'Revenus' : 'Income'}</th>
                                 <th className="text-right">{language === 'fr' ? 'Dépenses' : 'Expenses'}</th>
-                                <th className="text-right">{language === 'fr' ? 'Solde Clôture' : 'Closing Balance'}</th>
+                                <th className="text-right">{language === 'fr' ? 'Clôture' : 'Closing'}</th>
                                 <th className="text-right">{language === 'fr' ? 'Variation' : 'Change'}</th>
                             </tr>
                         </thead>

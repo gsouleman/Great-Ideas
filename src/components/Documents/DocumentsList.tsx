@@ -112,44 +112,60 @@ const DocumentsList: React.FC<DocumentsListProps> = ({ language }) => {
     };
 
     return (
-        <div>
-            <h2 style={{ marginBottom: 'var(--spacing-lg)' }}>{text.title}</h2>
+        <div className="fade-in">
+            <div style={{ padding: 'var(--spacing-lg)', borderBottom: '4px solid #000000', marginBottom: 'var(--spacing-xl)' }}>
+                <h2 style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '-0.02em', margin: 0 }}>
+                    {text.title}
+                </h2>
+            </div>
 
             {/* Filters */}
-            <div style={{
-                display: 'flex',
-                gap: 'var(--spacing-md)',
-                marginBottom: 'var(--spacing-lg)',
-                flexWrap: 'wrap'
-            }}>
-                <input
-                    type="text"
-                    className="input"
-                    placeholder={text.search}
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    style={{ flex: '1', minWidth: '200px' }}
-                />
+            <div className="card mb-lg" style={{ padding: 'var(--spacing-lg)' }}>
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                    gap: 'var(--spacing-md)'
+                }}>
+                    <div className="form-group" style={{ marginBottom: 0 }}>
+                        <label className="form-label" style={{ fontWeight: 800, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)' }}>
+                            {language === 'fr' ? 'RECHERCHER' : 'SEARCH'}
+                        </label>
+                        <input
+                            type="text"
+                            className="form-input"
+                            placeholder={text.search}
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
 
-                <select
-                    className="input"
-                    value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value as DocumentCategory | 'ALL')}
-                    style={{ minWidth: '200px' }}
-                >
-                    {Object.entries(categoryOptions).map(([value, label]) => (
-                        <option key={value} value={value}>{label}</option>
-                    ))}
-                </select>
+                    <div className="form-group" style={{ marginBottom: 0 }}>
+                        <label className="form-label" style={{ fontWeight: 800, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)' }}>
+                            {language === 'fr' ? 'CATÉGORIE' : 'CATEGORY'}
+                        </label>
+                        <select
+                            className="form-select"
+                            value={selectedCategory}
+                            onChange={(e) => setSelectedCategory(e.target.value as DocumentCategory | 'ALL')}
+                        >
+                            {Object.entries(categoryOptions).map(([value, label]) => (
+                                <option key={value} value={value}>{label}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
             </div>
 
             {/* Documents count */}
             <div style={{
                 marginBottom: 'var(--spacing-md)',
-                color: 'var(--text-secondary)',
-                fontSize: '0.875rem'
+                color: '#000000',
+                fontSize: 'var(--font-size-xs)',
+                fontWeight: 900,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em'
             }}>
-                {text.totalDocuments}: {filteredDocs.length}
+                {text.totalDocuments}: <span style={{ color: 'var(--color-primary)' }}>{filteredDocs.length}</span>
             </div>
 
             {/* Documents list */}

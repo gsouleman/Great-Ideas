@@ -86,7 +86,6 @@ export const AssetsList: React.FC<AssetsListProps> = ({ language }) => {
 
     const totalValue = assets.reduce((sum, a) => sum + calculateCurrentValue(a), 0);
     const realEstateAssets = assets.filter(a => a.type === 'realEstate');
-    const vehicleAssets = assets.filter(a => a.type === 'vehicleTransport');
     const totalLandArea = realEstateAssets.reduce((sum, a) => {
         const sizeMatch = a.size?.match(/(\d+\.?\d*)/);
         return sum + (sizeMatch ? parseFloat(sizeMatch[1]) : 0);
@@ -120,15 +119,6 @@ export const AssetsList: React.FC<AssetsListProps> = ({ language }) => {
         setEditingAsset(null);
     };
 
-    const getAssetIcon = (type: AssetType) => {
-        switch (type) {
-            case 'realEstate': return '🏢';
-            case 'vehicleTransport': return '🚗';
-            case 'equipment': return '🔧';
-            case 'investment': return '📈';
-            default: return '📦';
-        }
-    };
 
     return (
         <div className="fade-in">
@@ -143,40 +133,33 @@ export const AssetsList: React.FC<AssetsListProps> = ({ language }) => {
 
             {/* Summary Cards */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-md)', marginBottom: 'var(--spacing-lg)' }}>
-                <div className="card card-compact">
-                    <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>
+                <div className="card">
+                    <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em', marginBottom: 'var(--spacing-xs)' }}>
                         {t.totalAssets}
                     </p>
-                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 700, color: 'var(--color-primary)' }}>
+                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 900, color: 'var(--color-primary)' }}>
                         {assets.length}
                     </p>
+                    <div style={{ marginTop: 'var(--spacing-sm)', borderTop: '3px solid var(--color-primary)', width: '30px' }}></div>
                 </div>
-                <div className="card card-compact">
-                    <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>
+                <div className="card">
+                    <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em', marginBottom: 'var(--spacing-xs)' }}>
                         {t.totalValue}
                     </p>
-                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 700, color: 'var(--color-success)' }}>
+                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 900, color: 'var(--color-success)' }}>
                         {formatCurrency(totalValue)}
                     </p>
+                    <div style={{ marginTop: 'var(--spacing-sm)', borderTop: '3px solid var(--color-success)', width: '30px' }}></div>
                 </div>
                 {realEstateAssets.length > 0 && (
-                    <div className="card card-compact">
-                        <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>
-                            {language === 'fr' ? 'Total Immobilier' : 'Total Real Estate'}
+                    <div className="card">
+                        <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em', marginBottom: 'var(--spacing-xs)' }}>
+                            {language === 'fr' ? 'Superficie' : 'Land Area'}
                         </p>
-                        <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 700, color: 'var(--color-secondary)' }}>
+                        <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 900, color: 'var(--color-secondary)' }}>
                             {totalLandArea.toFixed(1)} ha
                         </p>
-                    </div>
-                )}
-                {vehicleAssets.length > 0 && (
-                    <div className="card card-compact">
-                        <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>
-                            {language === 'fr' ? 'Total Véhicules' : 'Total Vehicles'}
-                        </p>
-                        <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 700, color: 'var(--color-warning)' }}>
-                            {vehicleAssets.length}
-                        </p>
+                        <div style={{ marginTop: 'var(--spacing-sm)', borderTop: '3px solid var(--color-secondary)', width: '30px' }}></div>
                     </div>
                 )}
             </div>
@@ -213,13 +196,10 @@ export const AssetsList: React.FC<AssetsListProps> = ({ language }) => {
                         <div key={asset.id} className="card">
                             <div className="flex justify-between items-start mb-md">
                                 <div>
-                                    <div style={{ fontSize: 'var(--font-size-2xl)', marginBottom: 'var(--spacing-xs)' }}>
-                                        {getAssetIcon(asset.type)}
-                                    </div>
-                                    <h3 style={{ fontSize: 'var(--font-size-lg)', fontWeight: 600, marginBottom: 'var(--spacing-xs)' }}>
+                                    <h3 style={{ fontSize: 'var(--font-size-lg)', fontWeight: 900, marginBottom: 'var(--spacing-xs)', textTransform: 'uppercase' }}>
                                         {asset.name}
                                     </h3>
-                                    <span className="badge badge-income" style={{ fontSize: 'var(--font-size-xs)' }}>
+                                    <span className="badge" style={{ fontSize: 'var(--font-size-xs)', background: '#000000', color: '#ffffff', borderRadius: 0 }}>
                                         {asset.type === 'realEstate' && t.realEstate}
                                         {asset.type === 'vehicleTransport' && t.vehicleTransport}
                                         {asset.type === 'equipment' && t.equipment}
@@ -228,13 +208,13 @@ export const AssetsList: React.FC<AssetsListProps> = ({ language }) => {
                                     </span>
                                 </div>
                                 <div className="text-right">
-                                    <p className="text-success" style={{ fontSize: 'var(--font-size-xl)', fontWeight: 700 }}>
+                                    <p className="text-success" style={{ fontSize: 'var(--font-size-xl)', fontWeight: 900, color: 'var(--color-primary)' }}>
                                         {calculateCurrentValue(asset) > 0
-                                            ? `${calculateCurrentValue(asset).toLocaleString()} XAF`
+                                            ? `${calculateCurrentValue(asset).toLocaleString()}`
                                             : '—'}
                                     </p>
-                                    <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)' }}>
-                                        {t.currentValue}
+                                    <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 700 }}>
+                                        XAF
                                     </p>
                                 </div>
                             </div>
@@ -400,10 +380,9 @@ const AssetFormModal: React.FC<AssetFormModalProps> = ({
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" style={{ maxWidth: '600px' }} onClick={(e) => e.stopPropagation()}>
+            <div className="modal fade-in" style={{ maxWidth: '600px' }} onClick={(e) => e.stopPropagation()}>
                 <div className="modal-header">
-                    <h2>{asset ? t.edit + ' ' + t.assets : t.addAsset}</h2>
-                    <button className="btn-icon" onClick={onClose}>×</button>
+                    <h2 className="modal-title">{asset ? t.edit + ' ' + (language === 'fr' ? 'Actif' : 'Asset') : t.addAsset}</h2>
                 </div>
 
                 <form onSubmit={handleSubmit}>

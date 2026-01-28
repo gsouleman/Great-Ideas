@@ -95,12 +95,13 @@ function AppContent() {
         <div style={{ minHeight: '100vh' }}>
             {/* Header */}
             <header style={{
-                background: 'var(--color-bg-header)',
-                borderBottom: '1px solid var(--color-border)',
+                background: '#000000',
+                borderBottom: '4px solid var(--color-primary)',
                 padding: '0',
                 position: 'sticky',
                 top: 0,
                 zIndex: 100,
+                color: '#FFFFFF'
             }}>
                 <div style={{
                     maxWidth: '1400px',
@@ -108,28 +109,38 @@ function AppContent() {
                     padding: '0 var(--spacing-lg)',
                     display: 'flex',
                     justifyContent: 'space-between',
-                    alignItems: 'stretch', // Stretch to allow nav links to fill height
-                    height: '60px' // Professional fixed height
+                    alignItems: 'stretch',
+                    height: '64px'
                 }}>
-                    <div className="flex items-center gap-md">
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
                         <div style={{
-                            fontSize: 'var(--font-size-xl)',
-                            background: 'var(--color-primary)',
-                            color: 'white',
-                            padding: '0 var(--spacing-md)',
-                            height: '100%',
-                            display: 'flex',
-                            alignItems: 'center',
+                            fontSize: 'var(--font-size-2xl)',
+                            color: '#FFFFFF',
                             fontWeight: 900,
-                            letterSpacing: '-0.02em'
+                            letterSpacing: '-0.04em',
+                            textTransform: 'uppercase',
+                            lineHeight: 1
                         }}>
-                            GREAT IDEAS
+                            Great<br /><span style={{ color: 'var(--color-primary)' }}>Ideas</span>
                         </div>
                     </div>
 
-                    <nav className="flex" style={{ height: '100%' }}>
+                    <nav style={{ display: 'flex', height: '100%', marginLeft: 'var(--spacing-2xl)' }}>
                         <button
                             className={`nav-link ${currentView === 'assets' ? 'active' : ''}`}
+                            style={{
+                                background: 'transparent',
+                                border: 'none',
+                                color: currentView === 'assets' ? '#FFFFFF' : '#999',
+                                fontWeight: 900,
+                                textTransform: 'uppercase',
+                                fontSize: 'var(--font-size-xs)',
+                                letterSpacing: '0.1em',
+                                padding: '0 var(--spacing-lg)',
+                                borderBottom: currentView === 'assets' ? '4px solid var(--color-primary)' : '4px solid transparent',
+                                transition: 'all 0.2s',
+                                cursor: 'pointer'
+                            }}
                             onClick={() => {
                                 setCurrentView('assets');
                                 setAssetView('dashboard');
@@ -139,6 +150,19 @@ function AppContent() {
                         </button>
                         <button
                             className={`nav-link ${currentView === 'financial' ? 'active' : ''}`}
+                            style={{
+                                background: 'transparent',
+                                border: 'none',
+                                color: currentView === 'financial' ? '#FFFFFF' : '#999',
+                                fontWeight: 900,
+                                textTransform: 'uppercase',
+                                fontSize: 'var(--font-size-xs)',
+                                letterSpacing: '0.1em',
+                                padding: '0 var(--spacing-lg)',
+                                borderBottom: currentView === 'financial' ? '4px solid var(--color-primary)' : '4px solid transparent',
+                                transition: 'all 0.2s',
+                                cursor: 'pointer'
+                            }}
                             onClick={() => {
                                 setCurrentView('financial');
                                 setFinancialView('dashboard');
@@ -149,6 +173,19 @@ function AppContent() {
                         {hasPermission('view_admin') && (
                             <button
                                 className={`nav-link ${currentView === 'admin' ? 'active' : ''}`}
+                                style={{
+                                    background: 'transparent',
+                                    border: 'none',
+                                    color: currentView === 'admin' ? '#FFFFFF' : '#999',
+                                    fontWeight: 900,
+                                    textTransform: 'uppercase',
+                                    fontSize: 'var(--font-size-xs)',
+                                    letterSpacing: '0.1em',
+                                    padding: '0 var(--spacing-lg)',
+                                    borderBottom: currentView === 'admin' ? '4px solid var(--color-primary)' : '4px solid transparent',
+                                    transition: 'all 0.2s',
+                                    cursor: 'pointer'
+                                }}
                                 onClick={() => {
                                     setCurrentView('admin');
                                     setAdminView('dashboard');
@@ -159,28 +196,42 @@ function AppContent() {
                         )}
                     </nav>
 
-                    <div className="flex items-center gap-md">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)', marginLeft: 'auto' }}>
                         <button
-                            className="btn btn-outline btn-sm"
-                            style={{ color: 'white', borderColor: 'rgba(255,255,255,0.3)', borderRadius: '0' }}
+                            className="btn btn-sm"
+                            style={{
+                                background: 'transparent',
+                                color: '#FFFFFF',
+                                border: '1px solid #444',
+                                borderRadius: 0,
+                                fontWeight: 900,
+                                fontSize: 'var(--font-size-xs)'
+                            }}
                             onClick={() => setLanguage(language === 'fr' ? 'en' : 'fr')}
                         >
                             {language === 'fr' ? 'EN' : 'FR'}
                         </button>
 
                         {currentUser && (
-                            <div className="flex items-center gap-sm">
-                                <span style={{ color: 'var(--color-text-on-header-muted)', fontSize: 'var(--font-size-xs)', fontWeight: 600 }}>
-                                    {currentUser.memberName.toUpperCase()}
-                                </span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-md)', borderLeft: '1px solid #333', paddingLeft: 'var(--spacing-md)', height: '100%' }}>
+                                <div style={{ textAlign: 'right' }}>
+                                    <div style={{ color: '#FFFFFF', fontSize: 'var(--font-size-xs)', fontWeight: 900, textTransform: 'uppercase' }}>
+                                        {currentUser.memberName}
+                                    </div>
+                                    <div style={{ color: 'var(--color-primary)', fontSize: '10px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                        {currentUser.role}
+                                    </div>
+                                </div>
                                 <button
                                     className="btn btn-sm"
                                     style={{
-                                        background: 'transparent',
-                                        color: 'var(--color-text-on-header)',
-                                        border: '1px solid rgba(255,255,255,0.2)',
-                                        borderRadius: '0',
-                                        fontSize: 'var(--font-size-xs)'
+                                        background: 'var(--color-primary)',
+                                        color: '#FFFFFF',
+                                        border: 'none',
+                                        borderRadius: 0,
+                                        fontSize: 'var(--font-size-xs)',
+                                        fontWeight: 900,
+                                        height: '32px'
                                     }}
                                     onClick={() => {
                                         if (window.confirm(language === 'fr' ? 'Se déconnecter?' : 'Logout?')) {
@@ -188,7 +239,7 @@ function AppContent() {
                                         }
                                     }}
                                 >
-                                    {language === 'fr' ? 'DÉCONNEXION' : 'LOGOUT'}
+                                    {language === 'fr' ? 'LOGOUT' : 'LOGOUT'}
                                 </button>
                             </div>
                         )}
@@ -328,11 +379,17 @@ function AppContent() {
             {/* Footer */}
             <footer style={{
                 textAlign: 'center',
-                padding: 'var(--spacing-xl)',
-                color: 'var(--color-text-muted)',
-                fontSize: 'var(--font-size-sm)'
+                padding: 'var(--spacing-2xl) var(--spacing-lg)',
+                color: '#666',
+                fontSize: 'var(--font-size-xs)',
+                borderTop: '1px solid #eee',
+                background: '#fafafa',
+                fontWeight: 600,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em'
             }}>
-                <p>© 2026 Great Ideas Association - {language === 'fr' ? 'Système de Gestion Financière' : 'Financial Management System'}</p>
+                <p>© 2026 Great Ideas Association • {language === 'fr' ? 'SYSTÈME DE GESTION ADMINISTRATIVE' : 'ADMINISTRATIVE MANAGEMENT SYSTEM'}</p>
+                <p style={{ marginTop: '8px', color: '#999', fontWeight: 500 }}>SECURED ACCESS • AUTHORIZED PERSONNEL ONLY</p>
             </footer>
 
             {/* Transaction Form Modal */}

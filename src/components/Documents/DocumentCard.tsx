@@ -67,84 +67,81 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
 
     return (
         <div className="card" style={{
-            padding: 'var(--spacing-md)',
+            padding: 0,
             marginBottom: 'var(--spacing-md)',
-            borderLeft: `4px solid ${document.source === DocumentSource.GENERATED ? 'var(--success-color)' : 'var(--info-color)'}`
+            borderLeft: `8px solid ${document.source === DocumentSource.GENERATED ? 'var(--color-success)' : 'var(--color-primary)'}`,
+            overflow: 'hidden'
         }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
-                <div style={{ flex: 1 }}>
-                    <h4 style={{ marginBottom: 'var(--spacing-xs)', wordBreak: 'break-word' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'stretch' }}>
+                <div style={{ flex: 1, padding: 'var(--spacing-lg)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-sm)', marginBottom: 'var(--spacing-xs)' }}>
+                        <span style={{
+                            fontSize: 'var(--font-size-xs)',
+                            fontWeight: 900,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                            color: document.source === DocumentSource.GENERATED ? 'var(--color-success)' : 'var(--color-primary)'
+                        }}>
+                            {document.source === DocumentSource.GENERATED ? text.generated : text.uploaded}
+                        </span>
+                        <span style={{ color: '#DDD' }}>|</span>
+                        <span style={{
+                            fontSize: 'var(--font-size-xs)',
+                            fontWeight: 900,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em',
+                            color: getStatusBadgeColor(document.status)
+                        }}>
+                            {document.status}
+                        </span>
+                    </div>
+
+                    <h4 style={{ fontSize: 'var(--font-size-lg)', fontWeight: 900, textTransform: 'uppercase', marginBottom: 'var(--spacing-xs)', color: '#000000' }}>
                         {document.title}
                     </h4>
+
                     <div style={{
-                        fontSize: '0.875rem',
-                        color: 'var(--text-secondary)',
-                        marginBottom: 'var(--spacing-xs)'
+                        fontSize: 'var(--font-size-sm)',
+                        color: 'var(--color-text-secondary)',
+                        fontStyle: 'italic',
+                        marginBottom: 'var(--spacing-md)'
                     }}>
                         {document.description}
                     </div>
 
                     <div style={{
                         display: 'flex',
-                        gap: 'var(--spacing-sm)',
-                        flexWrap: 'wrap',
-                        marginTop: 'var(--spacing-sm)'
+                        gap: 'var(--spacing-md)',
+                        alignItems: 'center',
+                        fontSize: 'var(--font-size-xs)',
+                        fontWeight: 700,
+                        color: 'var(--color-text-muted)',
+                        textTransform: 'uppercase'
                     }}>
-                        <span className="badge" style={{
-                            backgroundColor: document.source === DocumentSource.GENERATED
-                                ? 'var(--success-light)'
-                                : 'var(--info-light)',
-                            color: document.source === DocumentSource.GENERATED
-                                ? 'var(--success-color)'
-                                : 'var(--info-color)'
-                        }}>
-                            {document.source === DocumentSource.GENERATED ? text.generated : text.uploaded}
-                        </span>
-
-                        <span className="badge" style={{
-                            backgroundColor: getStatusBadgeColor(document.status) + '20',
-                            color: getStatusBadgeColor(document.status)
-                        }}>
-                            {document.status}
-                        </span>
-
+                        <span>{formatDate(document.createdAt)}</span>
+                        <span>•</span>
+                        <span>{text.by} {document.createdBy}</span>
+                        <span>•</span>
+                        <span>{formatFileSize(document.fileSize)}</span>
                         {document.version > 1 && (
-                            <span className="badge">
-                                {text.version} {document.version}
-                            </span>
+                            <>
+                                <span>•</span>
+                                <span style={{ color: '#000', fontWeight: 900 }}>v{document.version}</span>
+                            </>
                         )}
-
-                        {document.expiryDate && (
-                            <span className="badge" style={{
-                                backgroundColor: new Date(document.expiryDate) < new Date()
-                                    ? 'var(--error-light)'
-                                    : 'var(--warning-light)',
-                                color: new Date(document.expiryDate) < new Date()
-                                    ? 'var(--error-color)'
-                                    : 'var(--warning-color)'
-                            }}>
-                                {text.expires}: {formatDate(document.expiryDate)}
-                            </span>
-                        )}
-                    </div>
-
-                    <div style={{
-                        fontSize: '0.75rem',
-                        color: 'var(--text-secondary)',
-                        marginTop: 'var(--spacing-sm)'
-                    }}>
-                        {formatDate(document.createdAt)} {text.by} {document.createdBy} • {formatFileSize(document.fileSize)}
                     </div>
                 </div>
 
                 <div style={{
                     display: 'flex',
-                    gap: 'var(--spacing-xs)',
-                    marginLeft: 'var(--spacing-md)'
+                    flexDirection: 'column',
+                    borderLeft: '1px solid var(--color-border)',
+                    background: '#fcfcfc'
                 }}>
                     <button
                         onClick={() => onView(document)}
-                        className="btn btn-sm btn-outline"
+                        className="btn btn-sm"
+                        style={{ flex: 1, borderRadius: 0, border: 'none', borderBottom: '1px solid var(--color-border)', background: 'transparent' }}
                         title={text.view}
                     >
                         👁️
@@ -152,7 +149,8 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
 
                     <button
                         onClick={() => onDownload(document)}
-                        className="btn btn-sm btn-primary"
+                        className="btn btn-sm"
+                        style={{ flex: 1, borderRadius: 0, border: 'none', borderBottom: '1px solid var(--color-border)', background: 'transparent' }}
                         title={text.download}
                     >
                         ⬇️
@@ -161,7 +159,8 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
                     {onDelete && document.canDelete && (
                         <button
                             onClick={() => onDelete(document)}
-                            className="btn btn-sm btn-danger"
+                            className="btn btn-sm"
+                            style={{ flex: 1, borderRadius: 0, border: 'none', background: 'transparent', color: 'var(--color-danger)' }}
                             title={text.delete}
                         >
                             🗑️

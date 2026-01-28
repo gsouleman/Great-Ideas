@@ -113,12 +113,12 @@ export const UserManagement: React.FC<UserManagementProps> = ({ language }) => {
             </div>
 
             {/* Users Table */}
-            <div className="card">
+            <div className="card" style={{ padding: 0 }}>
                 <div className="table-container">
                     <table className="table">
                         <thead>
                             <tr>
-                                <th>{language === 'fr' ? 'Nom d\'utilisateur' : 'Username'}</th>
+                                <th>{language === 'fr' ? 'Utilisateur' : 'Username'}</th>
                                 <th>{language === 'fr' ? 'Nom du Membre' : 'Member Name'}</th>
                                 <th>Email</th>
                                 <th>{language === 'fr' ? 'Rôle' : 'Role'}</th>
@@ -138,34 +138,36 @@ export const UserManagement: React.FC<UserManagementProps> = ({ language }) => {
                                 filteredUsers.map(user => (
                                     <tr key={user.id}>
                                         <td>
-                                            <strong>{user.username}</strong>
+                                            <div style={{ fontWeight: 800 }}>{user.username}</div>
                                             {user.mustChangePassword && (
                                                 <span className="badge" style={{
-                                                    marginLeft: 'var(--spacing-xs)',
-                                                    background: 'rgba(245, 158, 11, 0.2)',
-                                                    color: 'var(--color-warning)',
-                                                    border: '2px solid var(--color-warning)',
-                                                    fontSize: 'var(--font-size-xs)'
+                                                    background: 'var(--color-warning)',
+                                                    color: '#000000',
+                                                    borderRadius: 0,
+                                                    fontSize: 'var(--font-size-xs)',
+                                                    fontWeight: 800,
+                                                    marginTop: '4px',
+                                                    display: 'inline-block'
                                                 }}>
-                                                    {language === 'fr' ? 'Doit changer MdP' : 'Must Change Pwd'}
+                                                    {language === 'fr' ? 'CHANGE PWD' : 'CHANGE PWD'}
                                                 </span>
                                             )}
                                         </td>
                                         <td>{user.memberName}</td>
-                                        <td className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>{user.email}</td>
+                                        <td className="text-muted" style={{ fontSize: 'var(--font-size-xs)', fontWeight: 700 }}>{user.email}</td>
                                         <td>
-                                            <span className={`badge ${getRoleBadgeClass(user.role)}`}>
-                                                {getRoleLabel(user.role, language)}
+                                            <span className="badge" style={{ borderRadius: 0, fontWeight: 800, background: '#000000', color: '#ffffff' }}>
+                                                {getRoleLabel(user.role, language).toUpperCase()}
                                             </span>
                                         </td>
                                         <td className="text-center">
                                             {user.is2FAEnabled ? (
-                                                <span style={{ color: 'var(--color-success)', fontSize: 'var(--font-size-lg)' }}>✓</span>
+                                                <span style={{ color: 'var(--color-success)', fontWeight: 900 }}>YES</span>
                                             ) : (
-                                                <span style={{ color: 'var(--color-text-muted)', fontSize: 'var(--font-size-lg)' }}>-</span>
+                                                <span style={{ color: 'var(--color-text-muted)' }}>-</span>
                                             )}
                                         </td>
-                                        <td className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>
+                                        <td className="text-muted" style={{ fontSize: 'var(--font-size-xs)', fontWeight: 700 }}>
                                             {user.lastLogin
                                                 ? new Date(user.lastLogin).toLocaleString(language === 'fr' ? 'fr-FR' : 'en-US', {
                                                     dateStyle: 'short',
@@ -199,13 +201,15 @@ export const UserManagement: React.FC<UserManagementProps> = ({ language }) => {
 
                 <div style={{
                     padding: 'var(--spacing-md)',
-                    borderTop: '1px solid var(--color-border)',
+                    borderTop: '1px solid #000000',
                     color: 'var(--color-text-muted)',
-                    fontSize: 'var(--font-size-sm)'
+                    fontSize: 'var(--font-size-xs)',
+                    textTransform: 'uppercase',
+                    fontWeight: 700
                 }}>
                     {language === 'fr'
-                        ? `${filteredUsers.length} utilisateur(s) affiché(s) sur ${users.length} total`
-                        : `Showing ${filteredUsers.length} of ${users.length} user(s)`}
+                        ? `${filteredUsers.length} affiché(s) / ${users.length} total`
+                        : `Showing ${filteredUsers.length} / ${users.length} users`}
                 </div>
             </div>
 
@@ -220,15 +224,6 @@ export const UserManagement: React.FC<UserManagementProps> = ({ language }) => {
     );
 };
 
-const getRoleBadgeClass = (role: User['role']): string => {
-    switch (role) {
-        case 'admin': return 'badge-expense';
-        case 'excom': return '';
-        case 'member': return 'badge-income';
-        case 'guest': return '';
-        default: return '';
-    }
-};
 
 const getRoleLabel = (role: User['role'], language: Language): string => {
     const labels = {

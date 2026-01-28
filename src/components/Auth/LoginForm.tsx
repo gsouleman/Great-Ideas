@@ -61,54 +61,62 @@ export const LoginForm: React.FC<LoginFormProps> = ({ language, onLoginSuccess }
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            padding: 'var(--spacing-xl)'
+            background: '#000000',
+            padding: 'var(--spacing-xl)',
+            color: '#FFFFFF'
         }}>
-            <div className="card" style={{ maxWidth: '400px', width: '100%' }}>
-                <div style={{ textAlign: 'center', marginBottom: 'var(--spacing-xl)' }}>
+            <div style={{ maxWidth: '420px', width: '100%', border: '4px solid #CC0000', padding: 'var(--spacing-2xl)', background: '#FFFFFF' }}>
+                <div style={{ textAlign: 'left', marginBottom: 'var(--spacing-2xl)', borderBottom: '2px solid #000000', paddingBottom: 'var(--spacing-md)' }}>
                     <h1 style={{
-                        fontSize: 'var(--font-size-3xl)',
-                        fontWeight: 700,
-                        background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary))',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent',
-                        marginBottom: 'var(--spacing-sm)'
+                        fontSize: 'var(--font-size-4xl)',
+                        fontWeight: 900,
+                        color: '#000000',
+                        textTransform: 'uppercase',
+                        letterSpacing: '-0.04em',
+                        lineHeight: 0.9,
+                        margin: 0
                     }}>
-                        💡 Great Ideas
+                        Great<br />Ideas
                     </h1>
-                    <p className="text-muted">
-                        {language === 'fr' ? 'Connexion au Système' : 'System Login'}
+                    <p style={{ color: '#CC0000', fontWeight: 800, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)', marginTop: 'var(--spacing-xs)', letterSpacing: '0.1em' }}>
+                        {language === 'fr' ? 'ADMINISTRATION PORTAL' : 'ADMINISTRATION PORTAL'}
                     </p>
                 </div>
 
                 <form onSubmit={handleSubmit}>
                     {error && (
-                        <div className="card card-compact" style={{
-                            background: 'rgba(239, 68, 68, 0.1)',
-                            border: '2px solid var(--color-danger)',
-                            marginBottom: 'var(--spacing-md)'
+                        <div style={{
+                            background: '#CC0000',
+                            color: '#FFFFFF',
+                            padding: 'var(--spacing-sm)',
+                            fontWeight: 900,
+                            textTransform: 'uppercase',
+                            fontSize: 'var(--font-size-xs)',
+                            marginBottom: 'var(--spacing-lg)',
+                            textAlign: 'center'
                         }}>
-                            <p style={{ color: 'var(--color-danger)', fontSize: 'var(--font-size-sm)' }}>{error}</p>
+                            {error}
                         </div>
                     )}
 
                     <div className="form-group">
-                        <label className="form-label">
-                            {language === 'fr' ? 'Nom d\'utilisateur' : 'Username'}
+                        <label className="form-label" style={{ color: '#000000', fontWeight: 900, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)', letterSpacing: '0.05em' }}>
+                            {language === 'fr' ? 'Identifiant' : 'Username'}
                         </label>
                         <input
                             type="text"
                             className="form-input"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            placeholder={language === 'fr' ? 'Entrez votre nom d\'utilisateur' : 'Enter your username'}
+                            placeholder={language === 'fr' ? 'USER ID' : 'USER ID'}
                             required
                             autoFocus
+                            style={{ border: '2px solid #000000', color: '#000000', borderRadius: 0 }}
                         />
                     </div>
 
                     <div className="form-group">
-                        <label className="form-label">
+                        <label className="form-label" style={{ color: '#000000', fontWeight: 900, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)', letterSpacing: '0.05em' }}>
                             {language === 'fr' ? 'Mot de passe' : 'Password'}
                         </label>
                         <input
@@ -116,24 +124,35 @@ export const LoginForm: React.FC<LoginFormProps> = ({ language, onLoginSuccess }
                             className="form-input"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            placeholder={language === 'fr' ? 'Entrez votre mot de passe' : 'Enter your password'}
+                            placeholder="••••••••"
                             required
+                            style={{ border: '2px solid #000000', color: '#000000', borderRadius: 0 }}
                         />
                     </div>
 
                     <button
                         type="submit"
                         className="btn btn-primary"
-                        style={{ width: '100%', marginTop: 'var(--spacing-md)' }}
+                        style={{
+                            width: '100%',
+                            marginTop: 'var(--spacing-lg)',
+                            background: '#000000',
+                            color: '#FFFFFF',
+                            height: '50px',
+                            fontSize: 'var(--font-size-md)',
+                            fontWeight: 900,
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.1em'
+                        }}
                         disabled={loading}
                     >
-                        {loading ? (language === 'fr' ? 'Connexion...' : 'Logging in...') : (language === 'fr' ? 'Se connecter' : 'Login')}
+                        {loading ? (language === 'fr' ? 'WAITING...' : 'WAITING...') : (language === 'fr' ? 'LOG IN' : 'LOG IN')}
                     </button>
                 </form>
 
-                <div style={{ marginTop: 'var(--spacing-lg)', textAlign: 'center', fontSize: 'var(--font-size-sm)', color: 'var(--color-text-muted)' }}>
-                    <p>{language === 'fr' ? 'Identifiants par défaut:' : 'Default credentials:'}</p>
-                    <p><strong>admin</strong> / <strong>admin</strong></p>
+                <div style={{ marginTop: 'var(--spacing-xl)', textAlign: 'left', fontSize: 'var(--font-size-xs)', color: '#666666', borderTop: '1px solid #EEEEEE', paddingTop: 'var(--spacing-md)' }}>
+                    <p style={{ fontWeight: 700, textTransform: 'uppercase' }}>{language === 'fr' ? 'System Access' : 'System Access'}</p>
+                    <p>Secured administration environment. Unauthorized access is prohibited.</p>
                 </div>
             </div>
         </div>

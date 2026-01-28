@@ -112,17 +112,20 @@ export const PaymentTracker: React.FC<PaymentTrackerProps> = ({ language }) => {
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-md)', marginBottom: 'var(--spacing-lg)' }}>
-                <div className="card card-compact">
-                    <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>{t.outstanding}</p>
-                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 700, color: 'var(--color-danger)' }}>{formatCurrency(stats.totalDue)}</p>
+                <div className="card">
+                    <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em', marginBottom: 'var(--spacing-xs)' }}>{t.outstanding}</p>
+                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 900, color: 'var(--color-danger)' }}>{formatCurrency(stats.totalDue)}</p>
+                    <div style={{ marginTop: 'var(--spacing-sm)', borderTop: '3px solid var(--color-danger)', width: '30px' }}></div>
                 </div>
-                <div className="card card-compact">
-                    <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>{t.paid}</p>
-                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 700, color: 'var(--color-success)' }}>{formatCurrency(stats.totalPaid)}</p>
+                <div className="card">
+                    <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em', marginBottom: 'var(--spacing-xs)' }}>{t.paid}</p>
+                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 900, color: 'var(--color-success)' }}>{formatCurrency(stats.totalPaid)}</p>
+                    <div style={{ marginTop: 'var(--spacing-sm)', borderTop: '3px solid var(--color-success)', width: '30px' }}></div>
                 </div>
-                <div className="card card-compact">
-                    <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>{t.overdue}</p>
-                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 700, color: 'var(--color-warning)' }}>{formatCurrency(stats.totalOverdue)}</p>
+                <div className="card">
+                    <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em', marginBottom: 'var(--spacing-xs)' }}>{t.overdue}</p>
+                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 900, color: 'var(--color-warning)' }}>{formatCurrency(stats.totalOverdue)}</p>
+                    <div style={{ marginTop: 'var(--spacing-sm)', borderTop: '3px solid var(--color-warning)', width: '30px' }}></div>
                 </div>
             </div>
 
@@ -261,10 +264,9 @@ const PaymentFormModal: React.FC<PaymentFormModalProps> = ({ payment, language, 
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" style={{ maxWidth: '600px' }} onClick={e => e.stopPropagation()}>
+            <div className="modal fade-in" style={{ maxWidth: '600px' }} onClick={e => e.stopPropagation()}>
                 <div className="modal-header">
-                    <h2>{payment ? (language === 'fr' ? 'Modifier Paiement' : 'Edit Payment') : (language === 'fr' ? 'Ajouter Paiement' : 'Add Payment')}</h2>
-                    <button className="btn-icon" onClick={onClose}>×</button>
+                    <h2 className="modal-title">{payment ? (language === 'fr' ? 'Modifier Paiement' : 'Edit Payment') : (language === 'fr' ? 'Ajouter Paiement' : 'Add Payment')}</h2>
                 </div>
                 <form onSubmit={handleSubmit}>
                     <div className="modal-body">

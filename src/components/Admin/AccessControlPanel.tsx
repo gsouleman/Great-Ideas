@@ -87,14 +87,14 @@ export const AccessControlPanel: React.FC<AccessControlPanelProps> = ({ language
                 </h1>
             </div>
 
-            <div className="card">
+            <div className="card" style={{ padding: 0 }}>
                 <div className="table-container">
                     <table className="table">
                         <thead>
                             <tr>
                                 <th>{language === 'fr' ? 'Module / Rôle' : 'Module / Role'}</th>
                                 {roles.map(role => (
-                                    <th key={role} className="text-center" style={{ textTransform: 'capitalize' }}>
+                                    <th key={role} className="text-center" style={{ textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                                         {role}
                                     </th>
                                 ))}
@@ -103,7 +103,7 @@ export const AccessControlPanel: React.FC<AccessControlPanelProps> = ({ language
                         <tbody>
                             {modules.map(module => (
                                 <tr key={module}>
-                                    <td style={{ fontWeight: 600 }}>
+                                    <td style={{ fontWeight: 800, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)' }}>
                                         {module === 'FINANCIAL' ? (language === 'fr' ? 'Financier' : 'Financial') :
                                             module === 'ASSETS' ? (language === 'fr' ? 'Actifs' : 'Assets') :
                                                 'Admin'}
@@ -120,7 +120,7 @@ export const AccessControlPanel: React.FC<AccessControlPanelProps> = ({ language
                                                         disabled={isAdmin || saving}
                                                         onChange={() => handleToggle(role, module, access)}
                                                     />
-                                                    <span className="slider round"></span>
+                                                    <span className="slider"></span>
                                                 </label>
                                             </td>
                                         );
@@ -137,8 +137,8 @@ export const AccessControlPanel: React.FC<AccessControlPanelProps> = ({ language
                 .switch {
                     position: relative;
                     display: inline-block;
-                    width: 50px;
-                    height: 24px;
+                    width: 44px;
+                    height: 20px;
                 }
                 .switch input {
                     opacity: 0;
@@ -152,36 +152,29 @@ export const AccessControlPanel: React.FC<AccessControlPanelProps> = ({ language
                     left: 0;
                     right: 0;
                     bottom: 0;
-                    background-color: var(--color-border);
-                    transition: .4s;
+                    background-color: #e0e0e0;
+                    transition: .2s;
+                    border: 1px solid #000000;
                 }
                 .slider:before {
                     position: absolute;
                     content: "";
-                    height: 16px;
-                    width: 16px;
-                    left: 4px;
-                    bottom: 4px;
-                    background-color: white;
-                    transition: .4s;
+                    height: 12px;
+                    width: 12px;
+                    left: 3px;
+                    bottom: 3px;
+                    background-color: #000000;
+                    transition: .2s;
                 }
                 input:checked + .slider {
                     background-color: var(--color-primary);
                 }
-                input:focus + .slider {
-                    box-shadow: 0 0 1px var(--color-primary);
-                }
                 input:checked + .slider:before {
-                    transform: translateX(26px);
-                }
-                .slider.round {
-                    border-radius: 34px;
-                }
-                .slider.round:before {
-                    border-radius: 50%;
+                    transform: translateX(24px);
+                    background-color: white;
                 }
                 input:disabled + .slider {
-                    opacity: 0.5;
+                    opacity: 0.3;
                     cursor: not-allowed;
                 }
             ` }} />

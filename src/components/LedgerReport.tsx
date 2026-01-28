@@ -111,11 +111,11 @@ export const LedgerReport: React.FC<LedgerReportProps> = ({ transactions, langua
                 </button>
             </div>
 
-            {/* Period Filters */}
-            <div className="card mb-lg no-print">
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-md)' }}>
+            {/* Filters */}
+            <div className="card mb-lg no-print" style={{ padding: 'var(--spacing-lg)' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 'var(--spacing-md)' }}>
                     <div className="form-group" style={{ marginBottom: 0 }}>
-                        <label className="form-label">{t.period}</label>
+                        <label className="form-label" style={{ fontWeight: 800, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)' }}>{t.period}</label>
                         <select
                             className="form-select"
                             value={filter.periodType}
@@ -130,7 +130,7 @@ export const LedgerReport: React.FC<LedgerReportProps> = ({ transactions, langua
 
                     {filter.periodType === 'year' && (
                         <div className="form-group" style={{ marginBottom: 0 }}>
-                            <label className="form-label">{t.selectYear}</label>
+                            <label className="form-label" style={{ fontWeight: 800, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)' }}>{t.selectYear}</label>
                             <select
                                 className="form-select"
                                 value={filter.year}
@@ -146,7 +146,7 @@ export const LedgerReport: React.FC<LedgerReportProps> = ({ transactions, langua
                     {filter.periodType === 'month' && (
                         <>
                             <div className="form-group" style={{ marginBottom: 0 }}>
-                                <label className="form-label">{t.selectYear}</label>
+                                <label className="form-label" style={{ fontWeight: 800, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)' }}>{t.selectYear}</label>
                                 <select
                                     className="form-select"
                                     value={filter.year}
@@ -158,7 +158,7 @@ export const LedgerReport: React.FC<LedgerReportProps> = ({ transactions, langua
                                 </select>
                             </div>
                             <div className="form-group" style={{ marginBottom: 0 }}>
-                                <label className="form-label">{t.selectMonth}</label>
+                                <label className="form-label" style={{ fontWeight: 800, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)' }}>{t.selectMonth}</label>
                                 <select
                                     className="form-select"
                                     value={filter.month}
@@ -172,39 +172,8 @@ export const LedgerReport: React.FC<LedgerReportProps> = ({ transactions, langua
                         </>
                     )}
 
-                    {filter.periodType === 'custom' && (
-                        <>
-                            <div className="form-group" style={{ marginBottom: 0 }}>
-                                <label className="form-label">{t.startDate}</label>
-                                <input
-                                    type="date"
-                                    className="form-input"
-                                    value={filter.startDate}
-                                    onChange={(e) => setFilter({ ...filter, startDate: e.target.value })}
-                                />
-                            </div>
-                            <div className="form-group" style={{ marginBottom: 0 }}>
-                                <label className="form-label">{t.endDate}</label>
-                                <input
-                                    type="date"
-                                    className="form-input"
-                                    value={filter.endDate}
-                                    onChange={(e) => setFilter({ ...filter, endDate: e.target.value })}
-                                />
-                            </div>
-                        </>
-                    )}
-                </div>
-            </div>
-
-            {/* Additional Filters */}
-            <div className="card mb-lg no-print">
-                <h3 style={{ fontSize: 'var(--font-size-lg)', fontWeight: 600, marginBottom: 'var(--spacing-md)' }}>
-                    {language === 'fr' ? 'Filtres Avancés' : 'Advanced Filters'}
-                </h3>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-md)' }}>
                     <div className="form-group" style={{ marginBottom: 0 }}>
-                        <label className="form-label">{t.type}</label>
+                        <label className="form-label" style={{ fontWeight: 800, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)' }}>{t.type}</label>
                         <select
                             className="form-select"
                             value={typeFilter}
@@ -216,91 +185,61 @@ export const LedgerReport: React.FC<LedgerReportProps> = ({ transactions, langua
                         </select>
                     </div>
 
-                    <div className="form-group" style={{ marginBottom: 0 }}>
-                        <label className="form-label">{t.minAmount}</label>
-                        <input
-                            type="number"
-                            className="form-input"
-                            value={minAmount}
-                            onChange={(e) => setMinAmount(e.target.value)}
-                            placeholder="0"
-                            min="0"
-                            step="1000"
-                        />
+                    <div className="form-group" style={{ marginBottom: 0, display: 'flex', alignItems: 'flex-end' }}>
+                        <button
+                            className="btn btn-primary btn-outline"
+                            onClick={handleClearFilters}
+                            style={{ width: '100%' }}
+                            disabled={!hasActiveFilters}
+                        >
+                            {t.clearFilters}
+                        </button>
                     </div>
-
-                    <div className="form-group" style={{ marginBottom: 0 }}>
-                        <label className="form-label">{t.maxAmount}</label>
-                        <input
-                            type="number"
-                            className="form-input"
-                            value={maxAmount}
-                            onChange={(e) => setMaxAmount(e.target.value)}
-                            placeholder="999999"
-                            min="0"
-                            step="1000"
-                        />
-                    </div>
-
-                    {hasActiveFilters && (
-                        <div className="form-group" style={{ marginBottom: 0, display: 'flex', alignItems: 'flex-end' }}>
-                            <button
-                                className="btn btn-outline"
-                                onClick={handleClearFilters}
-                                style={{ width: '100%' }}
-                            >
-                                {t.clearFilters}
-                            </button>
-                        </div>
-                    )}
                 </div>
-
-                {hasActiveFilters && (
-                    <div style={{ marginTop: 'var(--spacing-md)', padding: 'var(--spacing-sm)', background: 'rgba(41, 98, 255, 0.1)', borderRadius: 'var(--radius-md)' }}>
-                        <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-secondary)' }}>
-                            {language === 'fr' ? '🔍 Filtres actifs:' : '🔍 Active filters:'} {filtered.length} {language === 'fr' ? 'transaction(s)' : 'transaction(s)'}
-                        </p>
-                    </div>
-                )}
             </div>
 
             {/* Summary Cards */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 'var(--spacing-md)', marginBottom: 'var(--spacing-lg)' }}>
-                <div className="card card-compact">
-                    <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)', marginBottom: 'var(--spacing-xs)' }}>
+                <div className="card">
+                    <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em', marginBottom: 'var(--spacing-xs)' }}>
                         {t.totalIncome}
                     </p>
-                    <p className="text-success" style={{ fontSize: 'var(--font-size-xl)', fontWeight: 700 }}>
+                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 900, color: 'var(--color-success)' }}>
                         {formatCurrency(summary.totalIncome)}
                     </p>
+                    <div style={{ marginTop: 'var(--spacing-sm)', borderTop: '3px solid var(--color-success)', width: '30px' }}></div>
                 </div>
-                <div className="card card-compact">
-                    <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)', marginBottom: 'var(--spacing-xs)' }}>
+                <div className="card">
+                    <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em', marginBottom: 'var(--spacing-xs)' }}>
                         {t.totalExpenses}
                     </p>
-                    <p className="text-danger" style={{ fontSize: 'var(--font-size-xl)', fontWeight: 700 }}>
+                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 900, color: 'var(--color-danger)' }}>
                         {formatCurrency(summary.totalExpenses)}
                     </p>
+                    <div style={{ marginTop: 'var(--spacing-sm)', borderTop: '3px solid var(--color-danger)', width: '30px' }}></div>
                 </div>
-                <div className="card card-compact">
-                    <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)', marginBottom: 'var(--spacing-xs)' }}>
+                <div className="card">
+                    <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em', marginBottom: 'var(--spacing-xs)' }}>
                         {t.netBalance}
                     </p>
                     <p style={{
-                        fontSize: 'var(--font-size-xl)',
-                        fontWeight: 700,
-                        color: summary.netBalance >= 0 ? 'var(--color-success)' : 'var(--color-danger)'
+                        fontSize: 'var(--font-size-2xl)',
+                        fontWeight: 900,
+                        color: summary.netBalance >= 0 ? 'var(--color-primary)' : 'var(--color-danger)'
                     }}>
                         {formatCurrency(summary.netBalance)}
                     </p>
+                    <div style={{ marginTop: 'var(--spacing-sm)', borderTop: `3px solid ${summary.netBalance >= 0 ? 'var(--color-primary)' : 'var(--color-danger)'}`, width: '30px' }}></div>
                 </div>
             </div>
 
             {/* Ledger Table */}
-            <div className="card">
-                <h2 style={{ fontSize: 'var(--font-size-xl)', fontWeight: 600, marginBottom: 'var(--spacing-lg)' }}>
-                    {t.transactions}
-                </h2>
+            <div className="card" style={{ padding: 0 }}>
+                <div style={{ padding: 'var(--spacing-lg)', borderBottom: '2px solid #000000' }}>
+                    <h2 style={{ fontSize: 'var(--font-size-lg)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        {t.transactions}
+                    </h2>
+                </div>
 
                 {transactionsWithBalance.length === 0 ? (
                     <p className="text-muted text-center" style={{ padding: 'var(--spacing-xl)' }}>

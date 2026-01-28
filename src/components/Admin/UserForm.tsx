@@ -125,158 +125,168 @@ export const UserForm: React.FC<UserFormProps> = ({ user, language, onClose }) =
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" style={{ maxWidth: '600px' }} onClick={e => e.stopPropagation()}>
+            <div className="modal fade-in" style={{ maxWidth: '600px' }} onClick={e => e.stopPropagation()}>
                 <div className="modal-header">
-                    <h2>{user
+                    <h2 className="modal-title">{user
                         ? (language === 'fr' ? 'Modifier l\'Utilisateur' : 'Edit User')
                         : (language === 'fr' ? 'Ajouter un Utilisateur' : 'Add User')
                     }</h2>
-                    <button className="btn-icon" onClick={onClose}>×</button>
                 </div>
 
                 <form onSubmit={handleSubmit}>
                     <div className="modal-body">
                         {error && (
-                            <div className="card card-compact" style={{
-                                background: 'rgba(239, 68, 68, 0.1)',
-                                border: '2px solid var(--color-danger)',
-                                marginBottom: 'var(--spacing-md)'
+                            <div style={{
+                                padding: 'var(--spacing-sm)',
+                                background: 'var(--color-primary)',
+                                color: 'white',
+                                fontWeight: 800,
+                                textTransform: 'uppercase',
+                                fontSize: 'var(--font-size-xs)',
+                                marginBottom: 'var(--spacing-md)',
+                                border: '1px solid #000000'
                             }}>
-                                <p style={{ color: 'var(--color-danger)', fontSize: 'var(--font-size-sm)' }}>{error}</p>
+                                {error}
                             </div>
                         )}
 
-                        {/* Member Selection */}
-                        <div className="form-group">
-                            <label className="form-label">
-                                {language === 'fr' ? 'Membre' : 'Member'} *
-                            </label>
-                            <select
-                                className="form-select"
-                                value={formData.memberId}
-                                onChange={(e) => handleMemberChange(e.target.value)}
-                                required
-                                disabled={!!user || (availableMembers.length === 0 && !user)}
-                            >
-                                <option value="">{language === 'fr' ? 'Sélectionner un membre' : 'Select a member'}</option>
-                                {availableMembers.map(member => (
-                                    <option key={member.id} value={member.id}>
-                                        {member.name} {member.remarks && `(${member.remarks})`}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
+                        <div style={{ display: 'grid', gap: 'var(--spacing-lg)' }}>
+                            {/* Member Selection */}
+                            <div className="form-group">
+                                <label className="form-label" style={{ fontWeight: 800, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)' }}>
+                                    {language === 'fr' ? 'Membre' : 'Member'} *
+                                </label>
+                                <select
+                                    className="form-select"
+                                    value={formData.memberId}
+                                    onChange={(e) => handleMemberChange(e.target.value)}
+                                    required
+                                    disabled={!!user || (availableMembers.length === 0 && !user)}
+                                >
+                                    <option value="">{language === 'fr' ? 'Sélectionner un membre' : 'Select a member'}</option>
+                                    {availableMembers.map(member => (
+                                        <option key={member.id} value={member.id}>
+                                            {member.name} {member.remarks && `(${member.remarks})`}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
 
-                        {/* Username (auto-filled, editable) */}
-                        <div className="form-group">
-                            <label className="form-label">
-                                {language === 'fr' ? 'Nom d\'utilisateur' : 'Username'} *
-                            </label>
-                            <input
-                                type="text"
-                                className="form-input"
-                                value={formData.username}
-                                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-                                disabled={!!user}
-                                required
-                            />
-                        </div>
-
-                        {/* Email */}
-                        <div className="form-group">
-                            <label className="form-label">Email *</label>
-                            <input
-                                type="email"
-                                className="form-input"
-                                value={formData.email}
-                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                required
-                            />
-                        </div>
-
-                        {/* Role */}
-                        <div className="form-group">
-                            <label className="form-label">
-                                {language === 'fr' ? 'Rôle' : 'Role'} *
-                            </label>
-                            <select
-                                className="form-select"
-                                value={formData.role}
-                                onChange={(e) => setFormData({ ...formData, role: e.target.value as UserRole })}
-                                required
-                            >
-                                <option value="admin">{language === 'fr' ? 'Administrateur' : 'Administrator'}</option>
-                                <option value="excom">Excom</option>
-                                <option value="member">{language === 'fr' ? 'Membre' : 'Member'}</option>
-                                <option value="guest">{language === 'fr' ? 'Invité' : 'Guest'}</option>
-                            </select>
-                        </div>
-
-                        {/* Password fields (only for new users) */}
-                        {!user && (
-                            <>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-md)' }}>
+                                {/* Username (auto-filled, editable) */}
                                 <div className="form-group">
-                                    <label className="form-label">
-                                        {language === 'fr' ? 'Mot de passe' : 'Password'} *
+                                    <label className="form-label" style={{ fontWeight: 800, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)' }}>
+                                        {language === 'fr' ? 'Identifiant' : 'Username'} *
                                     </label>
                                     <input
-                                        type="password"
+                                        type="text"
                                         className="form-input"
-                                        value={formData.password}
-                                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                        required
-                                        minLength={6}
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label className="form-label">
-                                        {language === 'fr' ? 'Confirmer le mot de passe' : 'Confirm Password'} *
-                                    </label>
-                                    <input
-                                        type="password"
-                                        className="form-input"
-                                        value={formData.confirmPassword}
-                                        onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                                        value={formData.username}
+                                        onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                                        disabled={!!user}
                                         required
                                     />
                                 </div>
 
+                                {/* Role */}
                                 <div className="form-group">
-                                    <label className="flex items-center gap-sm" style={{ cursor: 'pointer' }}>
-                                        <input
-                                            type="checkbox"
-                                            checked={formData.mustChangePassword}
-                                            onChange={(e) => setFormData({ ...formData, mustChangePassword: e.target.checked })}
-                                            style={{ width: 'auto' }}
-                                        />
-                                        <span>{language === 'fr' ? 'Forcer le changement de mot de passe' : 'Force password change'}</span>
+                                    <label className="form-label" style={{ fontWeight: 800, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)' }}>
+                                        {language === 'fr' ? 'Rôle' : 'Role'} *
                                     </label>
+                                    <select
+                                        className="form-select"
+                                        value={formData.role}
+                                        onChange={(e) => setFormData({ ...formData, role: e.target.value as UserRole })}
+                                        required
+                                    >
+                                        <option value="admin">{language === 'fr' ? 'Administrateur' : 'Administrator'}</option>
+                                        <option value="excom">Excom</option>
+                                        <option value="member">{language === 'fr' ? 'Membre' : 'Member'}</option>
+                                        <option value="guest">{language === 'fr' ? 'Invité' : 'Guest'}</option>
+                                    </select>
                                 </div>
-                            </>
-                        )}
+                            </div>
 
-                        <div className="form-group">
-                            <label className="flex items-center gap-sm" style={{ cursor: 'pointer' }}>
+                            {/* Email */}
+                            <div className="form-group">
+                                <label className="form-label" style={{ fontWeight: 800, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)' }}>Email *</label>
                                 <input
-                                    type="checkbox"
-                                    checked={formData.is2FAEnabled}
-                                    onChange={(e) => setFormData({ ...formData, is2FAEnabled: e.target.checked })}
-                                    style={{ width: 'auto' }}
+                                    type="email"
+                                    className="form-input"
+                                    value={formData.email}
+                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                    required
                                 />
-                                <span>{language === 'fr' ? 'Activer 2FA' : 'Enable 2FA'}</span>
-                            </label>
+                            </div>
+
+                            {/* Password fields (only for new users) */}
+                            {!user && (
+                                <div style={{ background: 'var(--color-bg-secondary)', padding: 'var(--spacing-md)', border: '1px solid var(--color-border)' }}>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'var(--spacing-md)' }}>
+                                        <div className="form-group">
+                                            <label className="form-label" style={{ fontWeight: 800, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)' }}>
+                                                {language === 'fr' ? 'Mot de passe' : 'Password'} *
+                                            </label>
+                                            <input
+                                                type="password"
+                                                className="form-input"
+                                                value={formData.password}
+                                                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                                required
+                                                minLength={6}
+                                            />
+                                        </div>
+
+                                        <div className="form-group">
+                                            <label className="form-label" style={{ fontWeight: 800, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)' }}>
+                                                {language === 'fr' ? 'Confirmer' : 'Confirm'} *
+                                            </label>
+                                            <input
+                                                type="password"
+                                                className="form-input"
+                                                value={formData.confirmPassword}
+                                                onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div style={{ marginTop: 'var(--spacing-md)' }}>
+                                        <label className="flex items-center gap-sm" style={{ cursor: 'pointer', fontSize: 'var(--font-size-sm)', fontWeight: 600 }}>
+                                            <input
+                                                type="checkbox"
+                                                checked={formData.mustChangePassword}
+                                                onChange={(e) => setFormData({ ...formData, mustChangePassword: e.target.checked })}
+                                                style={{ width: 'auto' }}
+                                            />
+                                            <span>{language === 'fr' ? 'Forcer le changement de MdP' : 'Force password change'}</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            )}
+
+                            <div style={{ borderTop: '1px solid var(--color-border)', paddingTop: 'var(--spacing-md)' }}>
+                                <label className="flex items-center gap-sm" style={{ cursor: 'pointer', fontSize: 'var(--font-size-sm)', fontWeight: 700 }}>
+                                    <input
+                                        type="checkbox"
+                                        checked={formData.is2FAEnabled}
+                                        onChange={(e) => setFormData({ ...formData, is2FAEnabled: e.target.checked })}
+                                        style={{ width: 'auto' }}
+                                    />
+                                    <span>{language === 'fr' ? 'ACTIVER 2FA' : 'ENABLE 2FA'}</span>
+                                </label>
+                            </div>
                         </div>
                     </div>
 
                     <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" onClick={onClose}>
+                        <button type="button" className="btn btn-primary btn-outline" onClick={onClose}>
                             {language === 'fr' ? 'Annuler' : 'Cancel'}
                         </button>
                         <button type="submit" className="btn btn-primary" disabled={loading}>
                             {loading
-                                ? (language === 'fr' ? 'Sauvegarde...' : 'Saving...')
-                                : (language === 'fr' ? 'Enregistrer' : 'Save')}
+                                ? (language === 'fr' ? 'SAUVEGARDE...' : 'SAVING...')
+                                : (language === 'fr' ? 'ENREGISTRER' : 'SAVE USER')}
                         </button>
                     </div>
                 </form>

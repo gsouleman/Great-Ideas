@@ -212,29 +212,25 @@ export const TransactionList: React.FC<TransactionListProps> = ({
             {/* Delete Confirmation Modal */}
             {transactionToDelete && (
                 <div className="modal-overlay" onClick={cancelDelete}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '400px' }}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '400px' }}>
                         <div className="modal-header">
-                            <h2>{language === 'fr' ? 'Confirmer la suppression' : 'Confirm Deletion'}</h2>
-                            <button className="btn-close" onClick={cancelDelete}>×</button>
+                            <h2 className="modal-title">{language === 'fr' ? 'Confirmer la suppression' : 'Confirm Deletion'}</h2>
                         </div>
                         <div className="modal-body">
                             <p>{language === 'fr'
                                 ? `Êtes-vous sûr de vouloir supprimer cette transaction ?`
                                 : `Are you sure you want to delete this transaction?`}</p>
-                            <p style={{ fontWeight: 'bold', marginTop: 'var(--spacing-md)' }}>
-                                {transactionToDelete.description}
-                            </p>
-                            <p style={{ fontSize: 'var(--font-size-sm)', color: 'var(--color-text-muted)', marginTop: 'var(--spacing-sm)' }}>
-                                {formatDate(transactionToDelete.date)} - {formatCurrency(transactionToDelete.amount)}
-                            </p>
-                            <p style={{ color: 'var(--color-error)', marginTop: 'var(--spacing-md)', fontSize: 'var(--font-size-sm)' }}>
-                                {language === 'fr'
-                                    ? 'Cette action est irréversible.'
-                                    : 'This action cannot be undone.'}
-                            </p>
+                            <div style={{ background: 'var(--color-bg-secondary)', padding: 'var(--spacing-md)', marginTop: 'var(--spacing-md)', borderLeft: '4px solid var(--color-danger)' }}>
+                                <p style={{ fontWeight: 'bold' }}>
+                                    {transactionToDelete.description}
+                                </p>
+                                <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', marginTop: 'var(--spacing-xs)' }}>
+                                    {formatDate(transactionToDelete.date)} - {formatCurrency(transactionToDelete.amount)}
+                                </p>
+                            </div>
                         </div>
                         <div className="modal-footer">
-                            <button className="btn btn-secondary" onClick={cancelDelete}>
+                            <button className="btn btn-outline" onClick={cancelDelete}>
                                 {language === 'fr' ? 'Annuler' : 'Cancel'}
                             </button>
                             <button className="btn btn-danger" onClick={confirmDelete}>

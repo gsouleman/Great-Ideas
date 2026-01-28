@@ -95,29 +95,32 @@ export const MembersList: React.FC<MembersListProps> = ({ language }) => {
 
             {/* Summary Cards */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-md)', marginBottom: 'var(--spacing-lg)' }}>
-                <div className="card card-compact">
-                    <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>
+                <div className="card">
+                    <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em', marginBottom: 'var(--spacing-xs)' }}>
                         {t.totalMembers}
                     </p>
-                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 700, color: 'var(--color-primary)' }}>
+                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 900, color: 'var(--color-primary)' }}>
                         {members.length}
                     </p>
+                    <div style={{ marginTop: 'var(--spacing-sm)', borderTop: '3px solid var(--color-primary)', width: '30px' }}></div>
                 </div>
-                <div className="card card-compact">
-                    <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>
+                <div className="card">
+                    <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em', marginBottom: 'var(--spacing-xs)' }}>
                         {t.totalShares}
                     </p>
-                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 700, color: 'var(--color-secondary)' }}>
+                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 900, color: 'var(--color-secondary)' }}>
                         {totalShares.toLocaleString()}
                     </p>
+                    <div style={{ marginTop: 'var(--spacing-sm)', borderTop: '3px solid var(--color-secondary)', width: '30px' }}></div>
                 </div>
-                <div className="card card-compact">
-                    <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>
+                <div className="card">
+                    <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em', marginBottom: 'var(--spacing-xs)' }}>
                         {language === 'fr' ? 'Superficie Totale' : 'Total Land Area'}
                     </p>
-                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 700, color: 'var(--color-success)' }}>
+                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 900, color: 'var(--color-success)' }}>
                         {(totalLand / 10000).toFixed(2)} ha
                     </p>
+                    <div style={{ marginTop: 'var(--spacing-sm)', borderTop: '3px solid var(--color-success)', width: '30px' }}></div>
                 </div>
             </div>
 
@@ -281,26 +284,22 @@ export const MembersList: React.FC<MembersListProps> = ({ language }) => {
             {/* Delete Confirmation Modal */}
             {memberToDelete && (
                 <div className="modal-overlay" onClick={cancelDelete}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '400px' }}>
+                    <div className="modal" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '400px' }}>
                         <div className="modal-header">
-                            <h2>{language === 'fr' ? 'Confirmer la suppression' : 'Confirm Deletion'}</h2>
-                            <button className="btn-close" onClick={cancelDelete}>×</button>
+                            <h2 className="modal-title">{language === 'fr' ? 'Confirmer la suppression' : 'Confirm Deletion'}</h2>
                         </div>
                         <div className="modal-body">
                             <p>{language === 'fr'
                                 ? `Êtes-vous sûr de vouloir supprimer ce membre ?`
                                 : `Are you sure you want to delete this member?`}</p>
-                            <p style={{ fontWeight: 'bold', marginTop: 'var(--spacing-md)' }}>
-                                {memberToDelete.name}
-                            </p>
-                            <p style={{ color: 'var(--color-error)', marginTop: 'var(--spacing-md)', fontSize: 'var(--font-size-sm)' }}>
-                                {language === 'fr'
-                                    ? 'Cette action est irréversible.'
-                                    : 'This action cannot be undone.'}
-                            </p>
+                            <div style={{ background: 'var(--color-bg-secondary)', padding: 'var(--spacing-md)', marginTop: 'var(--spacing-md)', borderLeft: '4px solid var(--color-danger)' }}>
+                                <p style={{ fontWeight: 'bold' }}>
+                                    {memberToDelete.name}
+                                </p>
+                            </div>
                         </div>
                         <div className="modal-footer">
-                            <button className="btn btn-secondary" onClick={cancelDelete}>
+                            <button className="btn btn-outline" onClick={cancelDelete}>
                                 {language === 'fr' ? 'Annuler' : 'Cancel'}
                             </button>
                             <button className="btn btn-danger" onClick={confirmDelete}>
@@ -373,10 +372,9 @@ const MemberFormModal: React.FC<MemberFormModalProps> = ({
 
     return (
         <div className="modal-overlay" onClick={onClose}>
-            <div className="modal-content" style={{ maxWidth: '600px' }} onClick={(e) => e.stopPropagation()}>
+            <div className="modal fade-in" style={{ maxWidth: '600px' }} onClick={(e) => e.stopPropagation()}>
                 <div className="modal-header">
-                    <h2>{member ? t.edit + ' ' + t.memberName : t.addMember}</h2>
-                    <button className="btn-icon" onClick={onClose}>×</button>
+                    <h2 className="modal-title">{member ? t.edit + ' ' + (language === 'fr' ? 'Membre' : 'Member') : t.addMember}</h2>
                 </div>
 
                 <form onSubmit={handleSubmit}>

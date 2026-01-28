@@ -439,30 +439,37 @@ const DocumentGeneration: React.FC<DocumentGenerationProps> = ({ language, curre
     };
 
     return (
-        <div>
-            <h2 style={{ marginBottom: 'var(--spacing-lg)' }}>{text.title}</h2>
+        <div className="fade-in">
+            <div style={{ padding: 'var(--spacing-lg)', borderBottom: '4px solid #000000', marginBottom: 'var(--spacing-xl)' }}>
+                <h2 style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '-0.02em', margin: 0 }}>
+                    {text.title}
+                </h2>
+            </div>
 
             {!selectedType ? (
                 <>
                     {/* Category filter */}
-                    <div style={{ marginBottom: 'var(--spacing-md)' }}>
-                        <label className="label">{text.category}</label>
-                        <select
-                            className="input"
-                            value={selectedCategory}
-                            onChange={(e) => setSelectedCategory(e.target.value as DocumentCategory | 'ALL')}
-                            style={{ maxWidth: '300px' }}
-                        >
-                            {Object.entries(categoryLabels).map(([value, label]) => (
-                                <option key={value} value={value}>{label}</option>
-                            ))}
-                        </select>
+                    <div className="card mb-lg" style={{ padding: 'var(--spacing-lg)' }}>
+                        <div style={{ maxWidth: '400px' }}>
+                            <label className="form-label" style={{ fontWeight: 800, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)' }}>
+                                {text.category}
+                            </label>
+                            <select
+                                className="form-select"
+                                value={selectedCategory}
+                                onChange={(e) => setSelectedCategory(e.target.value as DocumentCategory | 'ALL')}
+                            >
+                                {Object.entries(categoryLabels).map(([value, label]) => (
+                                    <option key={value} value={value}>{label}</option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
 
                     {/* Template selection grid */}
                     <div style={{
                         display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
                         gap: 'var(--spacing-md)'
                     }}>
                         {filteredTemplates.map(template => (
@@ -470,56 +477,54 @@ const DocumentGeneration: React.FC<DocumentGenerationProps> = ({ language, curre
                                 key={template.id}
                                 className="card"
                                 style={{
-                                    padding: 'var(--spacing-md)',
+                                    padding: 0,
                                     cursor: 'pointer',
-                                    transition: 'transform 0.2s, box-shadow 0.2s'
+                                    transition: 'background 0.2s',
+                                    borderLeft: `4px solid ${template.requiresApproval ? 'var(--color-warning)' : '#000'}`
                                 }}
                                 onClick={() => {
                                     setSelectedType(template.type);
                                     setFormData({ certificateNumber: generateCertificateNumber() });
                                 }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.transform = 'translateY(-2px)';
-                                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.transform = 'none';
-                                    e.currentTarget.style.boxShadow = 'none';
-                                }}
                             >
-                                <h4 style={{ marginBottom: 'var(--spacing-xs)' }}>
-                                    {documentTemplateNames[template.type][language]}
-                                </h4>
-                                <p style={{
-                                    fontSize: '0.875rem',
-                                    color: 'var(--text-secondary)',
-                                    marginBottom: 'var(--spacing-sm)'
-                                }}>
-                                    {documentTemplateDescriptions[template.type][language]}
-                                </p>
-                                <div>
-                                    <span className="badge">{categoryLabels[template.category]}</span>
-                                    {template.requiresApproval && (
-                                        <span className="badge" style={{ marginLeft: 'var(--spacing-xs)', backgroundColor: 'var(--warning-light)' }}>
-                                            {language === 'fr' ? 'Approbation requise' : 'Approval required'}
+                                <div style={{ padding: 'var(--spacing-lg)' }}>
+                                    <div style={{ fontSize: 'var(--font-size-xs)', fontWeight: 800, textTransform: 'uppercase', color: 'var(--color-secondary)', marginBottom: 'var(--spacing-xs)' }}>
+                                        {categoryLabels[template.category]}
+                                    </div>
+                                    <h4 style={{ fontSize: 'var(--font-size-lg)', fontWeight: 900, textTransform: 'uppercase', marginBottom: 'var(--spacing-sm)', color: '#000' }}>
+                                        {documentTemplateNames[template.type][language]}
+                                    </h4>
+                                    <p style={{
+                                        fontSize: 'var(--font-size-sm)',
+                                        color: 'var(--color-text-secondary)',
+                                        marginBottom: 'var(--spacing-md)',
+                                        lineHeight: 1.4
+                                    }}>
+                                        {documentTemplateDescriptions[template.type][language]}
+                                    </p>
+                                    <div style={{ display: 'flex', gap: 'var(--spacing-xs)' }}>
+                                        {template.requiresApproval && (
+                                            <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 800, textTransform: 'uppercase', color: '#92400e', background: '#fef3c7', padding: '2px 8px' }}>
+                                                {language === 'fr' ? 'APPROBATION REQUISE' : 'APPROVAL REQUIRED'}
+                                            </span>
+                                        )}
+                                        <span style={{ fontSize: 'var(--font-size-xs)', fontWeight: 800, textTransform: 'uppercase', color: '#000', background: '#eee', padding: '2px 8px' }}>
+                                            PDF
                                         </span>
-                                    )}
+                                    </div>
                                 </div>
                             </div>
                         ))}
                     </div>
                 </>
             ) : (
-                <div className="card" style={{ padding: 'var(--spacing-lg)', maxWidth: '800px' }}>
-                    <div style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'start',
-                        marginBottom: 'var(--spacing-lg)'
-                    }}>
+                <div className="card fade-in" style={{ padding: 0, borderTop: '4px solid #000' }}>
+                    <div style={{ padding: 'var(--spacing-lg)', borderBottom: '1px solid #eee', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div>
-                            <h3>{selectedTemplate && documentTemplateNames[selectedTemplate.type][language]}</h3>
-                            <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
+                            <h3 style={{ fontSize: 'var(--font-size-xl)', fontWeight: 900, textTransform: 'uppercase', margin: 0 }}>
+                                {selectedTemplate && documentTemplateNames[selectedTemplate.type][language]}
+                            </h3>
+                            <p style={{ color: 'var(--color-primary)', fontSize: 'var(--font-size-xs)', fontWeight: 800, textTransform: 'uppercase', marginTop: 'var(--spacing-xs)', letterSpacing: '0.05em' }}>
                                 {selectedTemplate && documentTemplateDescriptions[selectedTemplate.type][language]}
                             </p>
                         </div>
@@ -530,58 +535,71 @@ const DocumentGeneration: React.FC<DocumentGenerationProps> = ({ language, curre
                                 setError(null);
                                 setSuccess(null);
                             }}
-                            className="btn btn-sm btn-outline"
+                            className="btn btn-primary btn_outline"
+                            style={{ height: '36px', fontSize: 'var(--font-size-xs)' }}
                         >
-                            {text.cancel}
+                            {text.cancel.toUpperCase()}
                         </button>
                     </div>
 
-                    {error && (
-                        <div className="alert alert-danger" style={{ marginBottom: 'var(--spacing-md)' }}>
-                            {error}
-                        </div>
-                    )}
+                    <div style={{ padding: 'var(--spacing-lg)' }}>
+                        {error && (
+                            <div style={{ padding: 'var(--spacing-sm)', background: 'var(--color-primary)', color: 'white', fontWeight: 900, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)', marginBottom: 'var(--spacing-md)' }}>
+                                {error}
+                            </div>
+                        )}
 
-                    {success && (
-                        <div className="alert alert-success" style={{ marginBottom: 'var(--spacing-md)' }}>
-                            {success}
-                        </div>
-                    )}
+                        {success && (
+                            <div style={{ padding: 'var(--spacing-sm)', background: 'var(--color-success)', color: 'white', fontWeight: 900, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)', marginBottom: 'var(--spacing-md)' }}>
+                                {success}
+                            </div>
+                        )}
 
-                    {/* Required fields */}
-                    {selectedTemplate && selectedTemplate.requiredFields.length > 0 && (
-                        <div style={{ marginBottom: 'var(--spacing-lg)' }}>
-                            <h4 style={{ marginBottom: 'var(--spacing-md)' }}>{text.requiredFields}</h4>
-                            {selectedTemplate.requiredFields.map(field => (
-                                <div key={field} style={{ marginBottom: 'var(--spacing-md)' }}>
-                                    <label className="label">{field} *</label>
-                                    {renderFieldInput(field, true)}
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--spacing-lg)' }}>
+                            {/* Required fields */}
+                            {selectedTemplate && selectedTemplate.requiredFields.length > 0 && (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+                                    <h4 style={{ fontSize: 'var(--font-size-xs)', fontWeight: 900, textTransform: 'uppercase', color: '#666', borderBottom: '1px solid #eee', paddingBottom: 'var(--spacing-xs)' }}>
+                                        {text.requiredFields}
+                                    </h4>
+                                    {selectedTemplate.requiredFields.map(field => (
+                                        <div key={field} className="form-group">
+                                            <label className="form-label" style={{ fontWeight: 800, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)' }}>
+                                                {field} *
+                                            </label>
+                                            {renderFieldInput(field, true)}
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                    )}
+                            )}
 
-                    {/* Optional fields */}
-                    {selectedTemplate && selectedTemplate.optionalFields.length > 0 && (
-                        <div style={{ marginBottom: 'var(--spacing-lg)' }}>
-                            <h4 style={{ marginBottom: 'var(--spacing-md)' }}>{text.optionalFields}</h4>
-                            {selectedTemplate.optionalFields.map(field => (
-                                <div key={field} style={{ marginBottom: 'var(--spacing-md)' }}>
-                                    <label className="label">{field}</label>
-                                    {renderFieldInput(field, false)}
+                            {/* Optional fields */}
+                            {selectedTemplate && selectedTemplate.optionalFields.length > 0 && (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-md)' }}>
+                                    <h4 style={{ fontSize: 'var(--font-size-xs)', fontWeight: 900, textTransform: 'uppercase', color: '#666', borderBottom: '1px solid #eee', paddingBottom: 'var(--spacing-xs)' }}>
+                                        {text.optionalFields}
+                                    </h4>
+                                    {selectedTemplate.optionalFields.map(field => (
+                                        <div key={field} className="form-group">
+                                            <label className="form-label" style={{ fontWeight: 800, textTransform: 'uppercase', fontSize: 'var(--font-size-xs)' }}>
+                                                {field}
+                                            </label>
+                                            {renderFieldInput(field, false)}
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
+                            )}
                         </div>
-                    )}
 
-                    <button
-                        onClick={handleGenerate}
-                        className="btn btn-primary"
-                        disabled={isGenerating}
-                        style={{ width: '100%' }}
-                    >
-                        {isGenerating ? text.generating : text.generate}
-                    </button>
+                        <button
+                            onClick={handleGenerate}
+                            className="btn btn-primary"
+                            disabled={isGenerating}
+                            style={{ width: '100%', marginTop: 'var(--spacing-xl)', height: '48px', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em' }}
+                        >
+                            {isGenerating ? text.generating.toUpperCase() : text.generate.toUpperCase()}
+                        </button>
+                    </div>
                 </div>
             )}
         </div>

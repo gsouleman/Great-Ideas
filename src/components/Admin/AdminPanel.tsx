@@ -37,60 +37,56 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ language, onNavigateToUs
             {/* Statistics Cards */}
             <div style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
                 gap: 'var(--spacing-md)',
                 marginBottom: 'var(--spacing-lg)'
             }}>
-                <div className="card card-compact">
-                    <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>
-                        {language === 'fr' ? 'Total Utilisateurs' : 'Total Users'}
+                <div className="card">
+                    <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em', marginBottom: 'var(--spacing-xs)' }}>
+                        {language === 'fr' ? 'Utilisateurs' : 'Users'}
                     </p>
-                    <p style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 700, color: 'var(--color-primary)' }}>
+                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 900, color: 'var(--color-primary)' }}>
                         {stats.total}
                     </p>
+                    <div style={{ marginTop: 'var(--spacing-sm)', borderTop: '3px solid var(--color-primary)', width: '30px' }}></div>
                 </div>
 
-                <div className="card card-compact">
-                    <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>
-                        {language === 'fr' ? 'Administrateurs' : 'Administrators'}
+                <div className="card">
+                    <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em', marginBottom: 'var(--spacing-xs)' }}>
+                        {language === 'fr' ? 'Administrateurs' : 'Admins'}
                     </p>
-                    <p style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 700, color: 'var(--color-danger)' }}>
+                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 900, color: 'var(--color-danger)' }}>
                         {stats.admins}
                     </p>
+                    <div style={{ marginTop: 'var(--spacing-sm)', borderTop: '3px solid var(--color-danger)', width: '30px' }}></div>
                 </div>
 
-                <div className="card card-compact">
-                    <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>Excom</p>
-                    <p style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 700, color: 'var(--color-secondary)' }}>
+                <div className="card">
+                    <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em', marginBottom: 'var(--spacing-xs)' }}>Excom</p>
+                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 900, color: 'var(--color-secondary)' }}>
                         {stats.excom}
                     </p>
+                    <div style={{ marginTop: 'var(--spacing-sm)', borderTop: '3px solid var(--color-secondary)', width: '30px' }}></div>
                 </div>
 
-                <div className="card card-compact">
-                    <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>
+                <div className="card">
+                    <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em', marginBottom: 'var(--spacing-xs)' }}>
                         {language === 'fr' ? 'Membres' : 'Members'}
                     </p>
-                    <p style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 700, color: 'var(--color-success)' }}>
+                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 900, color: 'var(--color-success)' }}>
                         {stats.members}
                     </p>
+                    <div style={{ marginTop: 'var(--spacing-sm)', borderTop: '3px solid var(--color-success)', width: '30px' }}></div>
                 </div>
 
-                <div className="card card-compact">
-                    <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>
-                        {language === 'fr' ? 'Invités' : 'Guests'}
+                <div className="card">
+                    <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em', marginBottom: 'var(--spacing-xs)' }}>
+                        {language === 'fr' ? '2FA' : '2FA'}
                     </p>
-                    <p style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 700, color: 'var(--color-text-muted)' }}>
-                        {stats.guests}
-                    </p>
-                </div>
-
-                <div className="card card-compact">
-                    <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>
-                        {language === 'fr' ? '2FA Activé' : '2FA Enabled'}
-                    </p>
-                    <p style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 700, color: 'var(--color-warning)' }}>
+                    <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 900, color: 'var(--color-warning)' }}>
                         {stats.with2FA}
                     </p>
+                    <div style={{ marginTop: 'var(--spacing-sm)', borderTop: '3px solid var(--color-warning)', width: '30px' }}></div>
                 </div>
             </div>
 
@@ -111,10 +107,12 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ language, onNavigateToUs
 
             {/* Recent Logins */}
             {recentUsers.length > 0 && (
-                <div className="card">
-                    <h2 style={{ fontSize: 'var(--font-size-xl)', fontWeight: 600, marginBottom: 'var(--spacing-md)' }}>
-                        {language === 'fr' ? 'Connexions Récentes' : 'Recent Logins'}
-                    </h2>
+                <div className="card" style={{ padding: 0 }}>
+                    <div style={{ padding: 'var(--spacing-lg)', borderBottom: '2px solid #000000' }}>
+                        <h2 style={{ fontSize: 'var(--font-size-lg)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                            {language === 'fr' ? 'Connexions Récentes' : 'Recent Logins'}
+                        </h2>
+                    </div>
                     <div className="table-container">
                         <table className="table">
                             <thead>
@@ -128,14 +126,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ language, onNavigateToUs
                             <tbody>
                                 {recentUsers.map(user => (
                                     <tr key={user.id}>
-                                        <td>{user.username}</td>
+                                        <td style={{ fontWeight: 700 }}>{user.username}</td>
                                         <td>{user.memberName}</td>
                                         <td>
-                                            <span className={`badge ${getRoleBadgeClass(user.role)}`}>
-                                                {getRoleLabel(user.role, language)}
+                                            <span className="badge" style={{ borderRadius: 0, fontWeight: 800, background: '#000000', color: '#ffffff' }}>
+                                                {getRoleLabel(user.role, language).toUpperCase()}
                                             </span>
                                         </td>
-                                        <td className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>
+                                        <td className="text-muted" style={{ fontSize: 'var(--font-size-xs)', fontWeight: 700 }}>
                                             {new Date(user.lastLogin!).toLocaleString(language === 'fr' ? 'fr-FR' : 'en-US')}
                                         </td>
                                     </tr>
@@ -149,15 +147,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ language, onNavigateToUs
     );
 };
 
-const getRoleBadgeClass = (role: User['role']): string => {
-    switch (role) {
-        case 'admin': return 'badge-expense';
-        case 'excom': return '';
-        case 'member': return 'badge-income';
-        case 'guest': return '';
-        default: return '';
-    }
-};
 
 const getRoleLabel = (role: User['role'], language: Language): string => {
     const labels = {

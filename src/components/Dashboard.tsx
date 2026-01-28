@@ -30,85 +30,53 @@ export const Dashboard: React.FC<DashboardProps> = ({ transactions, onAddTransac
             {/* Summary Cards */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 'var(--spacing-lg)', marginBottom: 'var(--spacing-2xl)' }}>
                 {/* Total Income */}
-                <div className="card slide-in" style={{ animationDelay: '0.1s' }}>
+                <div className="card">
                     <div className="flex justify-between items-center">
                         <div>
-                            <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)', marginBottom: 'var(--spacing-xs)' }}>
+                            <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)', marginBottom: 'var(--spacing-xs)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em' }}>
                                 {t.totalIncome}
                             </p>
-                            <p className="text-success" style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 700 }}>
+                            <p className="text-success" style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 900, letterSpacing: '-0.02em' }}>
                                 {formatCurrency(summary.totalIncome)}
                             </p>
                         </div>
-                        <div style={{
-                            width: '60px',
-                            height: '60px',
-                            borderRadius: 'var(--radius-xl)',
-                            background: 'linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.05))',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: 'var(--font-size-2xl)'
-                        }}>
-                            📈
-                        </div>
                     </div>
+                    <div style={{ marginTop: 'var(--spacing-md)', borderTop: '4px solid var(--color-success)', width: '40px' }}></div>
                 </div>
 
                 {/* Total Expenses */}
-                <div className="card slide-in" style={{ animationDelay: '0.2s' }}>
+                <div className="card">
                     <div className="flex justify-between items-center">
                         <div>
-                            <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)', marginBottom: 'var(--spacing-xs)' }}>
+                            <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)', marginBottom: 'var(--spacing-xs)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em' }}>
                                 {t.totalExpenses}
                             </p>
-                            <p className="text-danger" style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 700 }}>
+                            <p className="text-danger" style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 900, letterSpacing: '-0.02em' }}>
                                 {formatCurrency(summary.totalExpenses)}
                             </p>
                         </div>
-                        <div style={{
-                            width: '60px',
-                            height: '60px',
-                            borderRadius: 'var(--radius-xl)',
-                            background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.05))',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: 'var(--font-size-2xl)'
-                        }}>
-                            📉
-                        </div>
                     </div>
+                    <div style={{ marginTop: 'var(--spacing-md)', borderTop: '4px solid var(--color-danger)', width: '40px' }}></div>
                 </div>
 
                 {/* Net Balance */}
-                <div className="card slide-in" style={{ animationDelay: '0.3s' }}>
+                <div className="card">
                     <div className="flex justify-between items-center">
                         <div>
-                            <p className="text-muted" style={{ fontSize: 'var(--font-size-sm)', marginBottom: 'var(--spacing-xs)' }}>
+                            <p className="text-muted" style={{ fontSize: 'var(--font-size-xs)', marginBottom: 'var(--spacing-xs)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: '0.05em' }}>
                                 {t.netBalance}
                             </p>
                             <p style={{
-                                fontSize: 'var(--font-size-2xl)',
-                                fontWeight: 700,
+                                fontSize: 'var(--font-size-3xl)',
+                                fontWeight: 900,
+                                letterSpacing: '-0.02em',
                                 color: summary.netBalance >= 0 ? 'var(--color-success)' : 'var(--color-danger)'
                             }}>
                                 {formatCurrency(summary.netBalance)}
                             </p>
                         </div>
-                        <div style={{
-                            width: '60px',
-                            height: '60px',
-                            borderRadius: 'var(--radius-xl)',
-                            background: `linear-gradient(135deg, ${summary.netBalance >= 0 ? 'rgba(41, 98, 255, 0.2), rgba(41, 98, 255, 0.05)' : 'rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.05)'})`,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            fontSize: 'var(--font-size-2xl)'
-                        }}>
-                            💰
-                        </div>
                     </div>
+                    <div style={{ marginTop: 'var(--spacing-md)', borderTop: `4px solid ${summary.netBalance >= 0 ? 'var(--color-primary)' : 'var(--color-warning)'}`, width: '40px' }}></div>
                 </div>
             </div>
 
