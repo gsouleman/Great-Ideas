@@ -49,6 +49,13 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick, language }) => 
                 ? 'Au cœur de Douala et dans nos zones d\'opérations, nous œuvrons activement pour l\'amélioration des conditions de vie des populations défavorisées par des initiatives concrètes de développement.'
                 : 'At the heart of Douala and throughout our operating zones, we actively work to improve the living conditions of underprivileged populations through concrete development initiatives.'
         },
+        project: {
+            title: language === 'fr' ? 'PROJET RÉSIDENTIEL MASSOUMBOU' : 'MASSOUMBOU VILLAGE PROJECT',
+            subtitle: language === 'fr' ? 'DÉVELOPPEMENT IMMOBILIER RÉCENT' : 'RECENT REAL ESTATE DEVELOPMENT',
+            content: language === 'fr'
+                ? "Notre dernier projet phare à Massoumbou redéfinit l'habitat villageois moderne. Nous développons des lotissements sécurisés avec des infrastructures durables, offrant à nos membres un cadre de vie exceptionnel alliant modernité et nature."
+                : "Our latest flagship project in Massoumbou village redefines modern rural living. We are developing secured residential plots with sustainable infrastructure, offering our members an exceptional living environment that blends modernity with nature."
+        },
         footer: {
             office: language === 'fr' ? 'SIÈGE SOCIAL : DOUALA, CAMEROUN' : 'HEADQUARTERS: DOUALA, CAMEROON',
             rights: '© 2026 GREAT IDEAS ASSOCIATION. ALL RIGHTS RESERVED.'
@@ -126,7 +133,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick, language }) => 
             {/* Mission Section */}
             <section style={{ padding: '80px var(--spacing-xl)', background: '#F8F8F8', borderBottom: '1px solid #000' }}>
                 <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
-                    <div style={{ marginBottom: '60px' }}>
+                    <div style={{ marginBottom: '40px' }}>
                         <h2 style={{ fontSize: 'var(--font-size-xs)', fontWeight: 900, color: '#CC0000', textTransform: 'uppercase', marginBottom: 'var(--spacing-md)', letterSpacing: '0.1em' }}>
                             {text.about.title}
                         </h2>
@@ -134,55 +141,66 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick, language }) => 
                             {text.about.content}
                         </p>
                     </div>
+                </div>
+            </section>
 
-                    {/* Central Visual Cluster */}
-                    <div style={{
-                        position: 'relative',
-                        height: '750px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginTop: '40px'
-                    }}>
-                        {/* Central Map */}
-                        <div style={{ width: '100%', maxWidth: '550px', zIndex: 1 }}>
-                            <img
-                                src="/assets/landing/cameroon_regions_map.png"
-                                alt="Regional Map of Cameroon"
-                                style={{ width: '100%', filter: 'drop-shadow(0 20px 40px rgba(0,0,0,0.15))' }}
-                            />
+            {/* Featured Project Section - Massoumbou */}
+            <section style={{ padding: '100px var(--spacing-xl)', background: '#FFFFFF' }}>
+                <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'minmax(300px, 1fr) minmax(300px, 1.2fr)', gap: '80px', alignItems: 'center' }}>
+                    <div style={{ border: '12px solid #000', height: '500px', position: 'relative', overflow: 'hidden' }}>
+                        <img
+                            src="/assets/landing/massoumbou_project.png"
+                            alt="Massoumbou Village Project"
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                        <div style={{ position: 'absolute', top: '20px', left: '20px', background: '#CC0000', color: '#FFF', padding: '10px 20px', fontWeight: 900, textTransform: 'uppercase', fontSize: '12px' }}>
+                            {text.project.subtitle}
                         </div>
+                    </div>
+                    <div style={{ textAlign: 'left' }}>
+                        <h2 style={{ fontSize: 'var(--font-size-4xl)', fontWeight: 900, lineHeight: 1, marginBottom: '30px', textTransform: 'uppercase' }}>
+                            {text.project.title}
+                        </h2>
+                        <p style={{ fontSize: 'var(--font-size-xl)', fontWeight: 600, color: '#444', lineHeight: 1.4, margin: 0 }}>
+                            {text.project.content}
+                        </p>
+                        <div style={{ marginTop: '40px', paddingLeft: '20px', borderLeft: '8px solid #CC0000', fontWeight: 800, textTransform: 'uppercase', color: '#000' }}>
+                            Massoumbou, Littoral Region
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-                        {/* Surrounding Activity Bubbles */}
-                        {/* top-left: Assets (Largest) */}
-                        <div style={{
-                            position: 'absolute', top: '20px', left: '0', width: '320px', height: '320px',
-                            borderRadius: '50%', border: '15px solid #000', overflow: 'hidden', zIndex: 2,
-                            boxShadow: '0 15px 45px rgba(0,0,0,0.3)'
-                        }}>
-                            <img src="/assets/landing/modern_city.png" alt="Assets" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                            <div style={{ position: 'absolute', bottom: '0', left: 0, right: 0, background: 'rgba(0,0,0,0.85)', color: '#FFF', padding: '15px', fontSize: '12px', fontWeight: 900 }}>ASSET DEVELOPMENT</div>
-                        </div>
-
-                        {/* top-right: Agri (Smallest) */}
-                        <div style={{
-                            position: 'absolute', top: '60px', right: '20px', width: '190px', height: '190px',
-                            borderRadius: '50%', border: '10px solid #CC0000', overflow: 'hidden', zIndex: 2,
-                            boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
-                        }}>
-                            <img src="/assets/landing/agri_transformation.png" alt="Agriculture" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                            <div style={{ position: 'absolute', bottom: '0', left: 0, right: 0, background: 'rgba(204,0,0,0.85)', color: '#FFF', padding: '8px', fontSize: '9px', fontWeight: 900 }}>AGRI-TRANSFORMATION</div>
-                        </div>
-
-                        {/* bottom-right: Trading (Medium) */}
-                        <div style={{
-                            position: 'absolute', bottom: '80px', right: '0', width: '230px', height: '230px',
-                            borderRadius: '50%', border: '12px solid #000', overflow: 'hidden', zIndex: 2,
-                            boxShadow: '0 12px 35px rgba(0,0,0,0.25)'
-                        }}>
-                            <img src="/assets/landing/local_commodities.png" alt="Commodities" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                            <div style={{ position: 'absolute', bottom: '0', left: 0, right: 0, background: 'rgba(0,0,0,0.85)', color: '#FFF', padding: '12px', fontSize: '10px', fontWeight: 900 }}>COMMODITY TRADING</div>
-                        </div>
+            {/* Activities Section */}
+            <section style={{ padding: '80px var(--spacing-xl)', background: '#000', color: '#FFF' }}>
+                <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+                    <h2 style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 900, marginBottom: '60px', textTransform: 'uppercase', borderLeft: '12px solid #CC0000', paddingLeft: '20px' }}>
+                        {language === 'fr' ? 'NOS ACTIVITÉS CLÉS' : 'OUR CORE ACTIVITIES'}
+                    </h2>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px' }}>
+                        {[
+                            { ...text.services[0], image: '/assets/landing/modern_city.png' },
+                            { ...text.services[1], image: '/assets/landing/agri_transformation.png' },
+                            { ...text.services[2], image: '/assets/landing/local_commodities.png' }
+                        ].map((service, i) => (
+                            <div key={i} style={{ border: '4px solid #FFF', background: '#111' }}>
+                                <div style={{ height: '200px', borderBottom: '4px solid #FFF', overflow: 'hidden' }}>
+                                    <img
+                                        src={service.image}
+                                        alt={service.title}
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    />
+                                </div>
+                                <div style={{ padding: '30px' }}>
+                                    <h3 style={{ fontSize: 'var(--font-size-xl)', fontWeight: 900, marginBottom: '15px', textTransform: 'uppercase', color: '#CC0000' }}>
+                                        {service.title}
+                                    </h3>
+                                    <p style={{ fontSize: 'var(--font-size-md)', color: '#CCC', fontWeight: 600, lineHeight: 1.5 }}>
+                                        {service.content}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>
