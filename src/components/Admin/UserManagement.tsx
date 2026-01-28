@@ -18,7 +18,7 @@ export const UserManagement: React.FC<UserManagementProps> = ({ language }) => {
     const refreshUsers = async () => {
         try {
             const data = await adminApi.getUsers();
-            setUsers(data);
+            setUsers(Array.isArray(data) ? data : []);
         } catch (error) {
             console.error('Failed to load users:', error);
         }

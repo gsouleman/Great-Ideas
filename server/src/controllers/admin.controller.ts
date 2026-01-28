@@ -10,7 +10,8 @@ export const getUsers = async (req: Request, res: Response) => {
         });
         res.json(users);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch users' });
+        console.error('Fetch users error:', error);
+        res.json([]);
     }
 };
 

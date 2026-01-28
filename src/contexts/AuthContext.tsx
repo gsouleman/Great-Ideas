@@ -55,7 +55,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                     }
 
                     if (perms) {
-                        setPermissions(perms);
+                        setPermissions(Array.isArray(perms) ? perms : []);
                     }
                 } catch (error) {
                     console.error('Failed to load user session or permissions:', error);

@@ -31,11 +31,10 @@ export const AccessControlPanel: React.FC<AccessControlPanelProps> = ({ language
         try {
             setLoading(true);
             const data = await adminApi.getPermissions();
-            // Map backend Role (uppercase) to frontend UserRole (lowercase) if necessary, 
-            // but let's assume the API returns what we need or we handle it here.
-            setPermissions(data.map((p: any) => ({
+            const permissionsArray = Array.isArray(data) ? data : [];
+            setPermissions(permissionsArray.map((p: any) => ({
                 ...p,
-                role: p.role.toLowerCase()
+                role: (p.role || '').toLowerCase()
             })));
         } catch (error) {
             console.error('Failed to fetch permissions:', error);
