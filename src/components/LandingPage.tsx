@@ -17,8 +17,8 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick, language }) => 
         about: {
             title: language === 'fr' ? 'NOTRE MISSION' : 'OUR MISSION',
             content: language === 'fr'
-                ? "Great Ideas est une association dédiée à la création de valeur pour ses membres et au développement des communautés locales. Nous acquérons des actifs stratégiques, les valorisons par un développement rigoureux et redistribuons les bénéfices à travers des projets communautaires d'envergure."
-                : "Great Ideas is an association dedicated to creating value for its members and developing local communities. We acquire strategic assets, enhance them through rigorous development, and redistribute benefits through impactful community projects."
+                ? "Great Ideas est une association dédiée à la création de valeur pour ses membres et au développement des communautés locales. Nous sommes activement engagés dans l'agriculture, l'agro-transformation et le négoce de matières premières. Nous acquérons des actifs stratégiques, les valorisons par un développement rigoureux et redistribuons les bénéfices à travers des projets communautaires d'envergure."
+                : "Great Ideas is an association dedicated to creating value for its members and developing local communities. We are actively involved in agriculture, agri-transformation, and commodity trading. We acquire strategic assets, enhance them through rigorous development, and redistribute benefits through impactful community projects."
         },
         services: [
             {
