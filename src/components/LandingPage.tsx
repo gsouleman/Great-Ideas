@@ -124,22 +124,65 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick, language }) => 
             </header>
 
             {/* Mission Section */}
-            <section style={{ padding: '80px var(--spacing-xl)', background: '#F8F8F8' }}>
-                <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '60px', alignItems: 'center' }}>
-                    <div>
+            <section style={{ padding: '80px var(--spacing-xl)', background: '#F8F8F8', borderBottom: '1px solid #000' }}>
+                <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
+                    <div style={{ marginBottom: '60px' }}>
                         <h2 style={{ fontSize: 'var(--font-size-xs)', fontWeight: 900, color: '#CC0000', textTransform: 'uppercase', marginBottom: 'var(--spacing-md)', letterSpacing: '0.1em' }}>
                             {text.about.title}
                         </h2>
-                        <p style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 800, lineHeight: 1.2, margin: 0, textTransform: 'uppercase' }}>
+                        <p style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 800, lineHeight: 1.1, margin: '0 auto', textTransform: 'uppercase', maxWidth: '900px' }}>
                             {text.about.content}
                         </p>
                     </div>
-                    <div style={{ height: '400px', border: '8px solid #000', background: '#FFF', overflow: 'hidden' }}>
-                        <img
-                            src="/assets/landing/cameroon_map.png"
-                            alt="Map of Cameroon"
-                            style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '20px' }}
-                        />
+
+                    {/* Central Visual Cluster */}
+                    <div style={{
+                        position: 'relative',
+                        height: '700px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        marginTop: '80px'
+                    }}>
+                        {/* Central Map */}
+                        <div style={{ width: '100%', maxWidth: '600px', zIndex: 1 }}>
+                            <img
+                                src="/assets/landing/cameroon_regions_map.png"
+                                alt="Regional Map of Cameroon"
+                                style={{ width: '100%', filter: 'drop-shadow(0 20px 30px rgba(0,0,0,0.1))' }}
+                            />
+                        </div>
+
+                        {/* Surrounding Activity Bubbles */}
+                        {/* top-left: Assets */}
+                        <div style={{
+                            position: 'absolute', top: '0', left: '0', width: '280px', height: '280px',
+                            borderRadius: '50%', border: '12px solid #000', overflow: 'hidden', zIndex: 2,
+                            boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
+                        }}>
+                            <img src="/assets/landing/modern_city.png" alt="Assets" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            <div style={{ position: 'absolute', bottom: '0', left: 0, right: 0, background: 'rgba(0,0,0,0.8)', color: '#FFF', padding: '10px', fontSize: '10px', fontWeight: 900 }}>ASSET DEVELOPMENT</div>
+                        </div>
+
+                        {/* top-right: Agri */}
+                        <div style={{
+                            position: 'absolute', top: '0', right: '0', width: '250px', height: '250px',
+                            borderRadius: '50%', border: '12px solid #CC0000', overflow: 'hidden', zIndex: 2,
+                            boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
+                        }}>
+                            <img src="/assets/landing/agri_transformation.png" alt="Agriculture" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            <div style={{ position: 'absolute', bottom: '0', left: 0, right: 0, background: 'rgba(204,0,0,0.8)', color: '#FFF', padding: '10px', fontSize: '10px', fontWeight: 900 }}>AGRI-TRANSFORMATION</div>
+                        </div>
+
+                        {/* bottom: Trading */}
+                        <div style={{
+                            position: 'absolute', bottom: '-40px', width: '260px', height: '260px',
+                            borderRadius: '50%', border: '12px solid #000', overflow: 'hidden', zIndex: 2,
+                            boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
+                        }}>
+                            <img src="/assets/landing/local_commodities.png" alt="Commodities" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            <div style={{ position: 'absolute', bottom: '0', left: 0, right: 0, background: 'rgba(0,0,0,0.8)', color: '#FFF', padding: '10px', fontSize: '10px', fontWeight: 900 }}>COMMODITY TRADING</div>
+                        </div>
                     </div>
                 </div>
             </section>
