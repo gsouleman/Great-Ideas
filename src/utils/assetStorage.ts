@@ -103,7 +103,8 @@ export const deleteMember = (id: string): void => {
 export const loadAssets = (): Asset[] => {
     const stored = localStorage.getItem(ASSETS_KEY);
     if (stored) {
-        return JSON.parse(stored);
+        const assets = JSON.parse(stored);
+        return Array.isArray(assets) ? assets : sampleAssets;
     }
     // Initialize with sample data
     saveAssets(sampleAssets);
@@ -163,7 +164,8 @@ export const deleteDocument = (id: string): void => {
 export const loadPaymentPlans = (): PaymentPlan[] => {
     const stored = localStorage.getItem(PAYMENT_PLANS_KEY);
     if (stored) {
-        return JSON.parse(stored);
+        const plans = JSON.parse(stored);
+        return Array.isArray(plans) ? plans : samplePaymentPlans;
     }
     // Initialize with sample data
     savePaymentPlans(samplePaymentPlans);
