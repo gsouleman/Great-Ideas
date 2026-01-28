@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Language } from '../../types';
 import { User } from '../../types/auth';
-import { loadUsers, deleteUser } from '../../utils/authStorage';
+import { adminApi } from '../../utils/api';
 import { UserForm } from './UserForm';
 
 interface UserManagementProps {
@@ -10,13 +10,22 @@ interface UserManagementProps {
 
 export const UserManagement: React.FC<UserManagementProps> = ({ language }) => {
     const [users, setUsers] = useState<User[]>([]);
+    const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [editingUser, setEditingUser] = useState<User | undefined>();
     const [searchTerm, setSearchTerm] = useState('');
     const [roleFilter, setRoleFilter] = useState<User['role'] | 'all'>('all');
 
-    const refreshUsers = () => {
-        setUsers(loadUsers());
+    const refreshUsers = async () => {
+        try {
+            setLoading(true);
+            const data = await adminApi.getUsers();
+            setUsers(data);
+        } catch (error) {
+            console.error('Failed to load users:', error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -33,7 +42,7 @@ export const UserManagement: React.FC<UserManagementProps> = ({ language }) => {
         setShowForm(true);
     };
 
-    const handleDeleteUser = (user: User) => {
+    const handleDeleteUser = async (user: User) => {
         if (user.username === 'admin') {
             alert(language === 'fr'
                 ? 'Impossible de supprimer l\'administrateur par défaut'
@@ -46,8 +55,11 @@ export const UserManagement: React.FC<UserManagementProps> = ({ language }) => {
             : `Are you sure you want to delete user "${user.username}"?`;
 
         if (window.confirm(confirmMessage)) {
-            if (deleteUser(user.id)) {
+            try {
+                await adminApi.deleteUser(user.id);
                 refreshUsers();
+            } catch (error) {
+                alert(language === 'fr' ? 'Échec de la suppression' : 'Deletion failed');
             }
         }
     };

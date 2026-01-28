@@ -63,3 +63,20 @@ model Asset {
   
   @@map("assets")
 }
+
+enum Module {
+  FINANCIAL
+  ASSETS
+  ADMIN
+}
+
+model ModuleAccess {
+  id        String   @id @default(uuid())
+  role      Role
+  module    Module
+  access    Boolean  @default(false)
+  updatedAt DateTime @updatedAt
+  
+  @@unique([role, module])
+  @@map("module_access")
+}

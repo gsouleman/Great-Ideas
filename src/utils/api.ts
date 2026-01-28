@@ -31,7 +31,37 @@ export const authApi = {
         const response = await api.post('/api/auth/change-password', data);
         return response.data;
     },
-    // Add other auth methods as needed
+};
+
+export const adminApi = {
+    getUsers: async () => {
+        const response = await api.get('/api/admin/users');
+        return response.data;
+    },
+    createUser: async (userData: any) => {
+        const response = await api.post('/api/admin/users', userData);
+        return response.data;
+    },
+    updateUser: async (id: string, userData: any) => {
+        const response = await api.put(`/api/admin/users/${id}`, userData);
+        return response.data;
+    },
+    deleteUser: async (id: string) => {
+        const response = await api.delete(`/api/admin/users/${id}`);
+        return response.data;
+    },
+    getPermissions: async () => {
+        const response = await api.get('/api/admin/permissions');
+        return response.data;
+    },
+    updatePermission: async (data: any) => {
+        const response = await api.post('/api/admin/permissions', data);
+        return response.data;
+    },
+    initPermissions: async () => {
+        const response = await api.post('/api/admin/permissions/init');
+        return response.data;
+    }
 };
 
 export default api;

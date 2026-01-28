@@ -3,7 +3,7 @@ import { Transaction, Language } from './types';
 import { AssetView } from './types/assets';
 
 type FinancialView = 'dashboard' | 'transactions' | 'monthly' | 'reports';
-type AdminView = 'dashboard' | 'users';
+type AdminView = 'dashboard' | 'users' | 'accessControl';
 import { Dashboard } from './components/Dashboard';
 import { TransactionList } from './components/TransactionList';
 import { TransactionForm } from './components/TransactionForm';
@@ -15,6 +15,7 @@ import { LoginForm } from './components/Auth/LoginForm';
 import { ChangePasswordModal } from './components/Auth/ChangePasswordModal';
 import { AdminPanel } from './components/Admin/AdminPanel';
 import { UserManagement } from './components/Admin/UserManagement';
+import { AccessControlPanel } from './components/Admin/AccessControlPanel';
 import { loadTransactions, saveTransactions, addTransaction, updateTransaction, deleteTransaction } from './utils/storage';
 import { sampleTransactions } from './data/sampleData';
 import { translations } from './utils/translations';
@@ -276,10 +277,10 @@ function AppContent() {
                                     {language === 'fr' ? 'Tableau de Bord' : 'Dashboard'}
                                 </button>
                                 <button
-                                    className={`btn ${adminView === 'users' ? 'btn-primary' : 'btn-outline'}`}
-                                    onClick={() => setAdminView('users')}
+                                    className={`btn ${adminView === 'accessControl' ? 'btn-primary' : 'btn-outline'}`}
+                                    onClick={() => setAdminView('accessControl')}
                                 >
-                                    {language === 'fr' ? 'Utilisateurs' : 'Users'}
+                                    {language === 'fr' ? 'Contrôle d\'Accès' : 'Access Control'}
                                 </button>
                             </div>
                         </div>
@@ -289,11 +290,16 @@ function AppContent() {
                             <AdminPanel
                                 language={language}
                                 onNavigateToUsers={() => setAdminView('users')}
+                                onNavigateToAccessControl={() => setAdminView('accessControl')}
                             />
                         )}
 
                         {adminView === 'users' && (
                             <UserManagement language={language} />
+                        )}
+
+                        {adminView === 'accessControl' && (
+                            <AccessControlPanel language={language} />
                         )}
                     </div>
                 )}

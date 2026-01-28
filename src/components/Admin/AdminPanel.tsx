@@ -6,9 +6,10 @@ import { User } from '../../types/auth';
 interface AdminPanelProps {
     language: Language;
     onNavigateToUsers: () => void;
+    onNavigateToAccessControl: () => void;
 }
 
-export const AdminPanel: React.FC<AdminPanelProps> = ({ language, onNavigateToUsers }) => {
+export const AdminPanel: React.FC<AdminPanelProps> = ({ language, onNavigateToUsers, onNavigateToAccessControl }) => {
     const users = loadUsers();
 
     const stats = {
@@ -101,6 +102,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ language, onNavigateToUs
                 <div style={{ display: 'flex', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
                     <button className="btn btn-primary" onClick={onNavigateToUsers}>
                         👥 {language === 'fr' ? 'Gestion des Utilisateurs' : 'User Management'}
+                    </button>
+                    <button className="btn btn-secondary" onClick={() => onNavigateToAccessControl()}>
+                        🔐 {language === 'fr' ? 'Contrôle d\'Accès' : 'Access Control'}
                     </button>
                 </div>
             </div>

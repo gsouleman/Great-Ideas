@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Language } from '../../types';
 import { User, UserRole } from '../../types/auth';
-import { createUser, updateUser, getAvailableMembers } from '../../utils/authStorage';
+import { adminApi } from '../../utils/api';
+import { getAvailableMembers } from '../../utils/authStorage';
 import { loadMembers, Member } from '../../utils/assetStorage';
 
 interface UserFormProps {
@@ -91,8 +92,8 @@ export const UserForm: React.FC<UserFormProps> = ({ user, language, onClose }) =
 
         try {
             if (user) {
-                // Update existing user
-                updateUser(user.id, {
+                // Update existing user via adminApi
+                await adminApi.updateUser(user.id, {
                     email: formData.email,
                     role: formData.role,
                     is2FAEnabled: formData.is2FAEnabled,
@@ -100,8 +101,8 @@ export const UserForm: React.FC<UserFormProps> = ({ user, language, onClose }) =
                     memberId: formData.memberId
                 });
             } else {
-                // Create new user
-                createUser({
+                // Create new user via adminApi
+                await adminApi.createUser({
                     username: formData.username,
                     memberName: formData.memberName,
                     memberId: formData.memberId,
@@ -115,6 +116,7 @@ export const UserForm: React.FC<UserFormProps> = ({ user, language, onClose }) =
 
             onClose();
         } catch (err) {
+            console.error('Save user error:', err);
             setError(language === 'fr' ? 'Erreur lors de la sauvegarde' : 'Error saving user');
         } finally {
             setLoading(false);
@@ -154,7 +156,7 @@ export const UserForm: React.FC<UserFormProps> = ({ user, language, onClose }) =
                                 value={formData.memberId}
                                 onChange={(e) => handleMemberChange(e.target.value)}
                                 required
-                                disabled={!!user || availableMembers.length === 0}
+                                disabled={!!user || (availableMembers.length === 0 && !user)}
                             >
                                 <option value="">{language === 'fr' ? 'Sélectionner un membre' : 'Select a member'}</option>
                                 {availableMembers.map(member => (
@@ -163,13 +165,6 @@ export const UserForm: React.FC<UserFormProps> = ({ user, language, onClose }) =
                                     </option>
                                 ))}
                             </select>
-                            {!user && availableMembers.length === 0 && (
-                                <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-warning)', marginTop: 'var(--spacing-xs)' }}>
-                                    {language === 'fr'
-                                        ? 'Tous les membres ont été assignés à des utilisateurs'
-                                        : 'All members have been assigned to users'}
-                                </p>
-                            )}
                         </div>
 
                         {/* Username (auto-filled, editable) */}
@@ -185,11 +180,6 @@ export const UserForm: React.FC<UserFormProps> = ({ user, language, onClose }) =
                                 disabled={!!user}
                                 required
                             />
-                            {!user && (
-                                <p style={{ fontSize: 'var(--font-size-xs)', color: 'var(--color-text-muted)', marginTop: 'var(--spacing-xs)' }}>
-                                    {language === 'fr' ? 'Vous pouvez modifier le nom d\'utilisateur auto-généré' : 'You can modify the auto-generated username'}
-                                </p>
-                            )}
                         </div>
 
                         {/* Email */}
@@ -260,13 +250,12 @@ export const UserForm: React.FC<UserFormProps> = ({ user, language, onClose }) =
                                             onChange={(e) => setFormData({ ...formData, mustChangePassword: e.target.checked })}
                                             style={{ width: 'auto' }}
                                         />
-                                        <span>{language === 'fr' ? 'Forcer le changement de mot de passe à la première connexion' : 'Force password change on first login'}</span>
+                                        <span>{language === 'fr' ? 'Forcer le changement de mot de passe' : 'Force password change'}</span>
                                     </label>
                                 </div>
                             </>
                         )}
 
-                        {/* 2FA Toggle */}
                         <div className="form-group">
                             <label className="flex items-center gap-sm" style={{ cursor: 'pointer' }}>
                                 <input
@@ -275,7 +264,7 @@ export const UserForm: React.FC<UserFormProps> = ({ user, language, onClose }) =
                                     onChange={(e) => setFormData({ ...formData, is2FAEnabled: e.target.checked })}
                                     style={{ width: 'auto' }}
                                 />
-                                <span>{language === 'fr' ? 'Activer l\'authentification à deux facteurs (2FA)' : 'Enable Two-Factor Authentication (2FA)'}</span>
+                                <span>{language === 'fr' ? 'Activer 2FA' : 'Enable 2FA'}</span>
                             </label>
                         </div>
                     </div>
@@ -284,7 +273,7 @@ export const UserForm: React.FC<UserFormProps> = ({ user, language, onClose }) =
                         <button type="button" className="btn btn-secondary" onClick={onClose}>
                             {language === 'fr' ? 'Annuler' : 'Cancel'}
                         </button>
-                        <button type="submit" className="btn btn-primary" disabled={loading || availableMembers.length === 0}>
+                        <button type="submit" className="btn btn-primary" disabled={loading}>
                             {loading
                                 ? (language === 'fr' ? 'Sauvegarde...' : 'Saving...')
                                 : (language === 'fr' ? 'Enregistrer' : 'Save')}

@@ -14,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 import * as authController from './controllers/auth.controller';
+import * as adminController from './controllers/admin.controller';
 
 // ... middleware setup ...
 
@@ -31,6 +32,15 @@ app.get('/health', (req, res) => {
 app.post('/api/auth/login', authController.login);
 app.post('/api/auth/register', authController.register);
 app.post('/api/auth/change-password', authController.changePassword);
+
+// Admin Routes
+app.get('/api/admin/users', adminController.getUsers);
+app.post('/api/admin/users', adminController.createUser);
+app.put('/api/admin/users/:id', adminController.updateUser);
+app.delete('/api/admin/users/:id', adminController.deleteUser);
+app.get('/api/admin/permissions', adminController.getPermissions);
+app.post('/api/admin/permissions', adminController.updatePermission);
+app.post('/api/admin/permissions/init', adminController.initializePermissions);
 
 // API Routes
 app.get('/api/users', async (req, res) => {

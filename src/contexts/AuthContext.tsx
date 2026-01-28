@@ -30,6 +30,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [session, setSession] = useState<AuthSession | null>(null);
     const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [permissions, setPermissions] = useState<any[]>([]);
 
     useEffect(() => {
         // Load session on mount
@@ -38,39 +39,42 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             setSession(existingSession);
 
             // Load the user data from the session via API
-            const loadUser = async () => {
+            const loadData = async () => {
                 try {
-                    const { authApi } = await import('../utils/api');
-                    const user = await authApi.getUser(existingSession.userId);
+                    const { authApi, adminApi } = await import('../utils/api');
+                    const [user, perms] = await Promise.all([
+                        authApi.getUser(existingSession.userId),
+                        adminApi.getPermissions()
+                    ]);
+
                     if (user) {
                         setCurrentUser(user);
                     } else {
-                        // If user not found on server (e.g. deleted), clear session
                         clearSession();
                         setSession(null);
                     }
+
+                    if (perms) {
+                        setPermissions(perms);
+                    }
                 } catch (error) {
-                    console.error('Failed to load user session:', error);
+                    console.error('Failed to load user session or permissions:', error);
                 }
             };
-            loadUser();
+            loadData();
         }
     }, []);
 
     const login = async (credentials: LoginCredentials): Promise<{ success: boolean; requires2FA?: boolean; userId?: string; email?: string; error?: string }> => {
         try {
-            // Import api dynamically to avoid circular dependencies if any
-            const { authApi } = await import('../utils/api');
+            const { authApi, adminApi } = await import('../utils/api');
             const result = await authApi.login(credentials);
 
             if (!result.success) {
                 return { success: false, error: result.error || 'Login failed' };
             }
 
-            // Handle 2FA
             if (result.requires2FA) {
-                // Generate 2FA code (simulated for now, should typically be server-side triggered)
-                // For V1, we simulate generation on client if server flags it
                 const code = generate2FACode(result.userId, result.email);
                 console.log(`[2FA SIMULATION] Code for ${result.email}: ${code}`);
                 return {
@@ -81,8 +85,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
                 };
             }
 
-            // No 2FA required - create session
             if (result.user) {
+                const perms = await adminApi.getPermissions();
+                setPermissions(perms);
+
                 const newSession: AuthSession = {
                     userId: result.user.id,
                     username: result.user.username,
@@ -101,7 +107,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             return { success: false, error: 'Unknown response from server' };
         } catch (error: any) {
             console.error('Login error:', error);
-            // Fallback error message
             const msg = error.response?.data?.error || 'Connection to server failed';
             return { success: false, error: msg };
         }
@@ -114,15 +119,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             return { success: false, error: result.error };
         }
 
-        // 2FA successful - create session
-        // Fetch user from API instead of local storage
         try {
-            const { authApi } = await import('../utils/api');
-            const user = await authApi.getUser(userId);
+            const { authApi, adminApi } = await import('../utils/api');
+            const [user, perms] = await Promise.all([
+                authApi.getUser(userId),
+                adminApi.getPermissions()
+            ]);
 
             if (!user) {
                 return { success: false, error: 'User not found' };
             }
+
+            if (perms) setPermissions(perms);
 
             const newSession: AuthSession = {
                 userId: user.id,
@@ -147,6 +155,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         clearSession();
         setSession(null);
         setCurrentUser(null);
+        setPermissions([]);
     };
 
     const updatePassword = async (request: ChangePasswordRequest): Promise<{ success: boolean; error?: string }> => {
@@ -155,7 +164,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             const result = await authApi.changePassword(request);
 
             if (result.success && currentUser?.id === request.userId) {
-                // Reload user data via API
                 const updatedUser = await authApi.getUser(request.userId);
                 if (updatedUser) {
                     setCurrentUser(updatedUser);
@@ -172,16 +180,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const hasPermission = (permission: string): boolean => {
         if (!currentUser) return false;
+        if (currentUser.role === 'admin') return true;
 
-        const rolePermissions = {
-            admin: ['all'],
-            excom: ['view_financial', 'view_assets', 'manage_users', 'view_admin'],
-            member: ['view_financial', 'view_assets'],
-            guest: ['view_financial']
+        // Map permission strings to modules
+        const permissionMap: Record<string, string> = {
+            'view_financial': 'FINANCIAL',
+            'view_assets': 'ASSETS',
+            'view_admin': 'ADMIN',
+            'manage_users': 'ADMIN'
         };
 
-        const permissions = rolePermissions[currentUser.role] || [];
-        return permissions.includes('all') || permissions.includes(permission);
+        const module = permissionMap[permission];
+        if (!module) return false;
+
+        const perm = permissions.find(p => p.role.toLowerCase() === currentUser.role.toLowerCase() && p.module === module);
+        return perm ? perm.access : false;
     };
 
     const value: AuthContextType = {
