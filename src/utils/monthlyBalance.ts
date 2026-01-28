@@ -7,7 +7,8 @@ import { parseISO, format, getYear } from 'date-fns';
 export const groupTransactionsByMonth = (transactions: Transaction[]): Map<string, Transaction[]> => {
     const grouped = new Map<string, Transaction[]>();
 
-    transactions.forEach((transaction) => {
+    const txArray = Array.isArray(transactions) ? transactions : [];
+    txArray.forEach((transaction) => {
         const date = parseISO(transaction.date);
         const monthKey = format(date, 'yyyy-MM'); // e.g., "2024-10"
 
@@ -41,8 +42,9 @@ export const calculateMonthlyBalances = (
     transactions: Transaction[],
     initialBalance: number = 0
 ): MonthlyBalance[] => {
+    const txArray = Array.isArray(transactions) ? transactions : [];
     // Sort transactions by date
-    const sorted = [...transactions].sort(
+    const sorted = [...txArray].sort(
         (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
     );
 

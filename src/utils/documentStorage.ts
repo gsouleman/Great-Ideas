@@ -122,6 +122,8 @@ export function loadGeneratedDocuments(): GeneratedDocument[] {
     if (!data) return [];
 
     const docs = JSON.parse(data);
+    if (!Array.isArray(docs)) return [];
+
     // Convert date strings back to Date objects
     return docs.map((doc: any) => ({
         ...doc,
@@ -188,6 +190,8 @@ export function loadUploadedDocuments(): UploadedDocument[] {
     if (!data) return [];
 
     const docs = JSON.parse(data);
+    if (!Array.isArray(docs)) return [];
+
     // Convert date strings back to Date objects
     return docs.map((doc: any) => ({
         ...doc,

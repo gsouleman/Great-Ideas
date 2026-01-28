@@ -47,6 +47,11 @@ export const loadMembers = (): Member[] => {
     const stored = localStorage.getItem(MEMBERS_KEY);
     if (stored) {
         const members = JSON.parse(stored);
+        if (!Array.isArray(members)) {
+            const migratedSamples = migrateMembersData(sampleMembers);
+            saveMembers(migratedSamples);
+            return migratedSamples;
+        }
         // Check if migration is needed (old data without memberId)
         if (members.length > 0 && !members[0].memberId) {
             const migrated = migrateMembersData(members);
@@ -133,7 +138,9 @@ export const deleteAsset = (id: string): void => {
 // Documents
 export const loadDocuments = (): Document[] => {
     const stored = localStorage.getItem(DOCUMENTS_KEY);
-    return stored ? JSON.parse(stored) : [];
+    if (!stored) return [];
+    const docs = JSON.parse(stored);
+    return Array.isArray(docs) ? docs : [];
 };
 
 export const saveDocuments = (documents: Document[]): void => {
@@ -222,7 +229,9 @@ export interface AssetShareConfig {
 
 export const loadAssetShareConfigs = (): AssetShareConfig[] => {
     const stored = localStorage.getItem(ASSET_SHARE_CONFIGS_KEY);
-    return stored ? JSON.parse(stored) : [];
+    if (!stored) return [];
+    const configs = JSON.parse(stored);
+    return Array.isArray(configs) ? configs : [];
 };
 
 export const saveAssetShareConfigs = (configs: AssetShareConfig[]): void => {
@@ -266,7 +275,9 @@ export interface MemberAssetAllocation {
 
 export const loadMemberAllocations = (): MemberAssetAllocation[] => {
     const stored = localStorage.getItem(MEMBER_ALLOCATIONS_KEY);
-    return stored ? JSON.parse(stored) : [];
+    if (!stored) return [];
+    const allocations = JSON.parse(stored);
+    return Array.isArray(allocations) ? allocations : [];
 };
 
 export const saveMemberAllocations = (allocations: MemberAssetAllocation[]): void => {
