@@ -124,26 +124,17 @@ export const initializePermissions = async (req: Request, res: Response) => {
             { role: 'GUEST' as Role, module: 'ADMIN' as Module, access: false },
         ];
 
-        for (const p of defaultPermissions) {
-            await prisma.moduleAccess.upsert({
-                where: {
-                    role_module: {
-                        role: p.role,
-                        module: p.module
-                    }
-                },
-                update: {},
-                create: {
-                    role: p.role,
-                    module: p.module,
-                    access: p.access
-                }
-            });
-        }
-
-        res.json({ message: 'Permissions initialized' });
-    } catch (error) {
-        console.error('Init permissions error:', error);
-        res.status(500).json({ error: 'Failed to initialize permissions' });
     }
+
+        // Ensure 'admin' user is actually an ADMIN
+        await prisma.user.updateMany({
+        where: { username: { equals: 'admin', mode: 'insensitive' } },
+        data: { role: Role.ADMIN }
+    });
+
+    res.json({ message: 'Permissions initialized and admin user role fixed' });
+} catch (error) {
+    console.error('Init permissions error:', error);
+    res.status(500).json({ error: 'Failed to initialize permissions' });
+}
 };

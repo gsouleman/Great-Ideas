@@ -190,7 +190,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     const hasPermission = (permission: string): boolean => {
         if (!currentUser) return false;
-        if (currentUser.role === 'admin') return true;
+        if (currentUser.role.toLowerCase() === 'admin') return true;
 
         // Map permission strings to modules
         const permissionMap: Record<string, string> = {
