@@ -134,11 +134,12 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick, language }) => 
                             {text.about.content}
                         </p>
                     </div>
-                    <div style={{ height: '400px', border: '8px solid #000', background: '#DDD' }}>
-                        {/* Placeholder for an impactful image */}
-                        <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyItems: 'center', justifyContent: 'center', fontSize: '4rem' }}>
-                            🌍
-                        </div>
+                    <div style={{ height: '400px', border: '8px solid #000', background: '#FFF', overflow: 'hidden' }}>
+                        <img
+                            src="/assets/landing/cameroon_map.png"
+                            alt="Map of Cameroon"
+                            style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '20px' }}
+                        />
                     </div>
                 </div>
             </section>
@@ -150,15 +151,27 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick, language }) => 
                         {language === 'fr' ? 'DOMAINES D\'INTERVENTION' : 'FIELDS OF INTERVENTION'}
                     </h2>
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '40px' }}>
-                        {text.services.map((service, i) => (
-                            <div key={i} style={{ border: '4px solid #000', padding: '40px' }}>
-                                <div style={{ fontSize: '3rem', marginBottom: '20px' }}>{service.icon}</div>
-                                <h3 style={{ fontSize: 'var(--font-size-xl)', fontWeight: 900, marginBottom: '15px', textTransform: 'uppercase' }}>
-                                    {service.title}
-                                </h3>
-                                <p style={{ fontSize: 'var(--font-size-md)', color: '#444', fontWeight: 600, lineHeight: 1.5 }}>
-                                    {service.content}
-                                </p>
+                        {[
+                            { ...text.services[0], image: '/assets/landing/modern_city.png' },
+                            { ...text.services[1], image: '/assets/landing/agri_transformation.png' },
+                            { ...text.services[2], image: '/assets/landing/local_commodities.png' }
+                        ].map((service, i) => (
+                            <div key={i} style={{ border: '4px solid #000', padding: '0', display: 'flex', flexDirection: 'column' }}>
+                                <div style={{ height: '220px', borderBottom: '4px solid #000', overflow: 'hidden' }}>
+                                    <img
+                                        src={service.image}
+                                        alt={service.title}
+                                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    />
+                                </div>
+                                <div style={{ padding: '30px' }}>
+                                    <h3 style={{ fontSize: 'var(--font-size-xl)', fontWeight: 900, marginBottom: '15px', textTransform: 'uppercase' }}>
+                                        {service.title}
+                                    </h3>
+                                    <p style={{ fontSize: 'var(--font-size-md)', color: '#444', fontWeight: 600, lineHeight: 1.5 }}>
+                                        {service.content}
+                                    </p>
+                                </div>
                             </div>
                         ))}
                     </div>
