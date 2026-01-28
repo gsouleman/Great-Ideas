@@ -5,9 +5,10 @@ import { Language } from '../../types';
 interface LoginFormProps {
     language: Language;
     onLoginSuccess: () => void;
+    onBackToLanding?: () => void;
 }
 
-export const LoginForm: React.FC<LoginFormProps> = ({ language, onLoginSuccess }) => {
+export const LoginForm: React.FC<LoginFormProps> = ({ language, onLoginSuccess, onBackToLanding }) => {
     const { login } = useAuth();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -153,6 +154,25 @@ export const LoginForm: React.FC<LoginFormProps> = ({ language, onLoginSuccess }
                 <div style={{ marginTop: 'var(--spacing-xl)', textAlign: 'left', fontSize: 'var(--font-size-xs)', color: '#666666', borderTop: '1px solid #EEEEEE', paddingTop: 'var(--spacing-md)' }}>
                     <p style={{ fontWeight: 700, textTransform: 'uppercase' }}>{language === 'fr' ? 'System Access' : 'System Access'}</p>
                     <p>Secured administration environment. Unauthorized access is prohibited.</p>
+                    {onBackToLanding && (
+                        <button
+                            onClick={onBackToLanding}
+                            style={{
+                                background: 'none',
+                                border: 'none',
+                                color: '#CC0000',
+                                fontWeight: 900,
+                                textTransform: 'uppercase',
+                                padding: 0,
+                                marginTop: '15px',
+                                cursor: 'pointer',
+                                fontSize: '10px',
+                                letterSpacing: '0.05em'
+                            }}
+                        >
+                            ← {language === 'fr' ? 'RETOUR À LA MISSION' : 'BACK TO MISSION'}
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

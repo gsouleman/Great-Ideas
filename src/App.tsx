@@ -16,12 +16,13 @@ import { ChangePasswordModal } from './components/Auth/ChangePasswordModal';
 import { AdminPanel } from './components/Admin/AdminPanel';
 import { UserManagement } from './components/Admin/UserManagement';
 import { AccessControlPanel } from './components/Admin/AccessControlPanel';
+import LandingPage from './components/LandingPage';
 import { loadTransactions, saveTransactions, addTransaction, updateTransaction, deleteTransaction } from './utils/storage';
 import { sampleTransactions } from './data/sampleData';
 import { translations } from './utils/translations';
 import './index.css';
 
-type View = 'financial' | 'assets' | 'admin';
+type View = 'financial' | 'assets' | 'admin' | 'landing';
 
 function AppContent() {
     const { currentUser, logout, hasPermission } = useAuth();
@@ -431,25 +432,25 @@ function App() {
 // Auth wrapper
 function AppWithAuth() {
     const { isAuthenticated } = useAuth();
-    // The language state is managed within AppContent, so no need to redefine it here.
-    // However, if LoginForm needs language, it must be passed.
-    // For now, assuming LoginForm can handle its own language or gets it from context.
+    const [showLogin, setShowLogin] = useState(false);
+    const [language] = useState<Language>('en');
 
     if (!isAuthenticated) {
-        // If LoginForm needs language, it should be passed here.
-        // For example: return <LoginForm language={someLanguageStateOrContext} onLoginSuccess={() => {}} />;
-        // As per the provided snippet, it expects language. Let's assume a default or context for LoginForm.
-        // Or, if AppWithAuth needs to manage language for LoginForm, it would need its own language state.
-        // Given the original AppContent manages language, let's assume LoginForm can get it from context or a default.
-        // The provided snippet for AppWithAuth had `const [language, setLanguage] = useState<Language>('fr');`
-        // but that conflicts with AppContent's management.
-        // For now, I'll use a placeholder for language if LoginForm truly needs it from AppWithAuth.
-        // However, the instruction only provided the `App` and `AppWithAuth` structure, not how `language` is handled for `LoginForm`.
-        // I will use the `language` variable from the original snippet for LoginForm, assuming it's defined in this scope.
-        // But it's not. So, I'll remove the `language` prop from LoginForm for now, or assume it's available via context.
-        // Let's re-add the language state to AppWithAuth for LoginForm's sake, as it was in the provided snippet.
-        const [language] = useState<Language>('en'); // Re-adding as per the provided snippet, assuming LoginForm needs it.
-        return <LoginForm language={language} onLoginSuccess={() => { }} />;
+        if (showLogin) {
+            return (
+                <LoginForm
+                    language={language}
+                    onLoginSuccess={() => setShowLogin(false)}
+                    onBackToLanding={() => setShowLogin(false)}
+                />
+            );
+        }
+        return (
+            <LandingPage
+                onLoginClick={() => setShowLogin(true)}
+                language={language}
+            />
+        );
     }
 
     return <AppContent />;
