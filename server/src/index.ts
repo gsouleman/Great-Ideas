@@ -40,7 +40,7 @@ app.put('/api/admin/users/:id', adminController.updateUser);
 app.delete('/api/admin/users/:id', adminController.deleteUser);
 app.get('/api/admin/permissions', adminController.getPermissions);
 app.post('/api/admin/permissions', adminController.updatePermission);
-app.post('/api/admin/permissions/init', adminController.initializePermissions);
+app.get('/api/admin/permissions/init', adminController.initializePermissions);
 
 // API Routes
 app.get('/api/users', async (req, res) => {
