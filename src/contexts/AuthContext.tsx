@@ -86,8 +86,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             }
 
             if (result.user) {
-                const perms = await adminApi.getPermissions();
-                setPermissions(perms);
+                // Fetch permissions as a soft dependency
+                try {
+                    const perms = await adminApi.getPermissions();
+                    setPermissions(perms || []);
+                } catch (pError) {
+                    console.error('Failed to fetch permissions during login:', pError);
+                    setPermissions([]);
+                }
 
                 const newSession: AuthSession = {
                     userId: result.user.id,
@@ -121,30 +127,34 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
         try {
             const { authApi, adminApi } = await import('../utils/api');
-            const [user, perms] = await Promise.all([
+            const [user, perms] = await Promise.allSettled([
                 authApi.getUser(userId),
                 adminApi.getPermissions()
             ]);
 
-            if (!user) {
+            const userData = user.status === 'fulfilled' ? user.value : null;
+            const permsData = perms.status === 'fulfilled' ? perms.value : [];
+
+            if (!userData) {
                 return { success: false, error: 'User not found' };
             }
 
-            if (perms) setPermissions(perms);
+            setPermissions(permsData || []);
+            const userObj = userData as User;
 
             const newSession: AuthSession = {
-                userId: user.id,
-                username: user.username,
-                memberName: user.memberName,
-                role: user.role,
+                userId: userObj.id,
+                username: userObj.username,
+                memberName: userObj.memberName,
+                role: userObj.role,
                 loginTime: new Date().toISOString()
             };
 
             saveSession(newSession);
             setSession(newSession);
-            setCurrentUser(user);
+            setCurrentUser(userObj);
 
-            return { success: true, user };
+            return { success: true, user: userObj };
         } catch (error) {
             console.error('Verify 2FA error:', error);
             return { success: false, error: 'Failed to retrieve user data' };

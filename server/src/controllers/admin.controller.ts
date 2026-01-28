@@ -75,9 +75,11 @@ export const deleteUser = async (req: Request, res: Response) => {
 export const getPermissions = async (req: Request, res: Response) => {
     try {
         const permissions = await prisma.moduleAccess.findMany();
-        res.json(permissions);
+        res.json(permissions || []);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch permissions' });
+        console.error('Fetch permissions error:', error);
+        // Return empty array instead of 500 to prevent login blocking
+        res.json([]);
     }
 };
 
