@@ -95,13 +95,12 @@ function AppContent() {
         <div style={{ minHeight: '100vh' }}>
             {/* Header */}
             <header style={{
-                background: 'var(--color-bg-secondary)',
+                background: 'var(--color-bg-header)',
                 borderBottom: '1px solid var(--color-border)',
-                padding: 'var(--spacing-lg) 0',
+                padding: '0',
                 position: 'sticky',
                 top: 0,
                 zIndex: 100,
-                backdropFilter: 'blur(10px)'
             }}>
                 <div style={{
                     maxWidth: '1400px',
@@ -109,76 +108,91 @@ function AppContent() {
                     padding: '0 var(--spacing-lg)',
                     display: 'flex',
                     justifyContent: 'space-between',
-                    alignItems: 'center'
+                    alignItems: 'stretch', // Stretch to allow nav links to fill height
+                    height: '60px' // Professional fixed height
                 }}>
                     <div className="flex items-center gap-md">
                         <div style={{
-                            fontSize: 'var(--font-size-2xl)',
-                            background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary))',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                            fontWeight: 700
+                            fontSize: 'var(--font-size-xl)',
+                            background: 'var(--color-primary)',
+                            color: 'white',
+                            padding: '0 var(--spacing-md)',
+                            height: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            fontWeight: 900,
+                            letterSpacing: '-0.02em'
                         }}>
-                            💡 Great Ideas
+                            GREAT IDEAS
                         </div>
                     </div>
 
-                    <nav className="flex gap-sm">
+                    <nav className="flex" style={{ height: '100%' }}>
                         <button
-                            className={`btn ${currentView === 'assets' ? 'btn-primary' : 'btn-outline'}`}
+                            className={`nav-link ${currentView === 'assets' ? 'active' : ''}`}
                             onClick={() => {
                                 setCurrentView('assets');
                                 setAssetView('dashboard');
                             }}
                         >
-                            {t.assetManagement}
+                            {language === 'fr' ? 'ACTIFS' : 'ASSETS'}
                         </button>
                         <button
-                            className={`btn ${currentView === 'financial' ? 'btn-primary' : 'btn-outline'}`}
+                            className={`nav-link ${currentView === 'financial' ? 'active' : ''}`}
                             onClick={() => {
                                 setCurrentView('financial');
                                 setFinancialView('dashboard');
                             }}
                         >
-                            {language === 'fr' ? 'Financier' : 'Financial'}
+                            {language === 'fr' ? 'FINANCIER' : 'FINANCE'}
                         </button>
                         {hasPermission('view_admin') && (
                             <button
-                                className={`btn ${currentView === 'admin' ? 'btn-primary' : 'btn-outline'}`}
+                                className={`nav-link ${currentView === 'admin' ? 'active' : ''}`}
                                 onClick={() => {
                                     setCurrentView('admin');
                                     setAdminView('dashboard');
                                 }}
                             >
-                                {language === 'fr' ? 'Administration' : 'Admin'}
+                                {language === 'fr' ? 'GESTION' : 'MANAGEMENT'}
                             </button>
                         )}
                     </nav>
 
-                    <button
-                        className="btn btn-outline btn-sm"
-                        onClick={() => setLanguage(language === 'fr' ? 'en' : 'fr')}
-                    >
-                        {language === 'fr' ? '🇬🇧 EN' : '🇫🇷 FR'}
-                    </button>
+                    <div className="flex items-center gap-md">
+                        <button
+                            className="btn btn-outline btn-sm"
+                            style={{ color: 'white', borderColor: 'rgba(255,255,255,0.3)', borderRadius: '0' }}
+                            onClick={() => setLanguage(language === 'fr' ? 'en' : 'fr')}
+                        >
+                            {language === 'fr' ? 'EN' : 'FR'}
+                        </button>
 
-                    {currentUser && (
-                        <div className="flex items-center gap-sm">
-                            <span className="text-muted" style={{ fontSize: 'var(--font-size-sm)' }}>
-                                {currentUser.memberName}
-                            </span>
-                            <button
-                                className="btn btn-outline btn-sm"
-                                onClick={() => {
-                                    if (window.confirm(language === 'fr' ? 'Se déconnecter?' : 'Logout?')) {
-                                        logout();
-                                    }
-                                }}
-                            >
-                                {language === 'fr' ? 'Déconnexion' : 'Logout'}
-                            </button>
-                        </div>
-                    )}
+                        {currentUser && (
+                            <div className="flex items-center gap-sm">
+                                <span style={{ color: 'var(--color-text-on-header-muted)', fontSize: 'var(--font-size-xs)', fontWeight: 600 }}>
+                                    {currentUser.memberName.toUpperCase()}
+                                </span>
+                                <button
+                                    className="btn btn-sm"
+                                    style={{
+                                        background: 'transparent',
+                                        color: 'var(--color-text-on-header)',
+                                        border: '1px solid rgba(255,255,255,0.2)',
+                                        borderRadius: '0',
+                                        fontSize: 'var(--font-size-xs)'
+                                    }}
+                                    onClick={() => {
+                                        if (window.confirm(language === 'fr' ? 'Se déconnecter?' : 'Logout?')) {
+                                            logout();
+                                        }
+                                    }}
+                                >
+                                    {language === 'fr' ? 'DÉCONNEXION' : 'LOGOUT'}
+                                </button>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </header>
 
@@ -193,31 +207,35 @@ function AppContent() {
                 {currentView === 'financial' && (
                     <div>
                         {/* Financial Sub-Navigation */}
-                        <div className="card mb-lg" style={{ padding: 'var(--spacing-md)' }}>
-                            <div style={{ display: 'flex', gap: 'var(--spacing-sm)', flexWrap: 'wrap' }}>
+                        <div className="mb-lg" style={{ borderBottom: '1px solid var(--color-border)', paddingBottom: 'var(--spacing-sm)' }}>
+                            <div style={{ display: 'flex', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
                                 <button
-                                    className={`btn ${financialView === 'dashboard' ? 'btn-primary' : 'btn-outline'}`}
+                                    className="nav-link"
+                                    style={{ color: financialView === 'dashboard' ? 'var(--color-primary)' : 'var(--color-text-secondary)', fontSize: 'var(--font-size-xs)', borderBottom: financialView === 'dashboard' ? '2px solid var(--color-primary)' : 'none' }}
                                     onClick={() => setFinancialView('dashboard')}
                                 >
-                                    {t.dashboard}
+                                    {t.dashboard.toUpperCase()}
                                 </button>
                                 <button
-                                    className={`btn ${financialView === 'transactions' ? 'btn-primary' : 'btn-outline'}`}
+                                    className="nav-link"
+                                    style={{ color: financialView === 'transactions' ? 'var(--color-primary)' : 'var(--color-text-secondary)', fontSize: 'var(--font-size-xs)', borderBottom: financialView === 'transactions' ? '2px solid var(--color-primary)' : 'none' }}
                                     onClick={() => setFinancialView('transactions')}
                                 >
-                                    {t.transactions}
+                                    {t.transactions.toUpperCase()}
                                 </button>
                                 <button
-                                    className={`btn ${financialView === 'monthly' ? 'btn-primary' : 'btn-outline'}`}
+                                    className="nav-link"
+                                    style={{ color: financialView === 'monthly' ? 'var(--color-primary)' : 'var(--color-text-secondary)', fontSize: 'var(--font-size-xs)', borderBottom: financialView === 'monthly' ? '2px solid var(--color-primary)' : 'none' }}
                                     onClick={() => setFinancialView('monthly')}
                                 >
-                                    {language === 'fr' ? 'Solde Mensuel' : 'Monthly Balance'}
+                                    {(language === 'fr' ? 'Solde Mensuel' : 'Monthly Balance').toUpperCase()}
                                 </button>
                                 <button
-                                    className={`btn ${financialView === 'reports' ? 'btn-primary' : 'btn-outline'}`}
+                                    className="nav-link"
+                                    style={{ color: financialView === 'reports' ? 'var(--color-primary)' : 'var(--color-text-secondary)', fontSize: 'var(--font-size-xs)', borderBottom: financialView === 'reports' ? '2px solid var(--color-primary)' : 'none' }}
                                     onClick={() => setFinancialView('reports')}
                                 >
-                                    {t.reports}
+                                    {t.reports.toUpperCase()}
                                 </button>
                             </div>
                         </div>
@@ -268,19 +286,21 @@ function AppContent() {
                 {currentView === 'admin' && (
                     <div>
                         {/* Admin Sub-Navigation */}
-                        <div className="card mb-lg" style={{ padding: 'var(--spacing-md)' }}>
-                            <div style={{ display: 'flex', gap: 'var(--spacing-sm)', flexWrap: 'wrap' }}>
+                        <div className="mb-lg" style={{ borderBottom: '1px solid var(--color-border)', paddingBottom: 'var(--spacing-sm)' }}>
+                            <div style={{ display: 'flex', gap: 'var(--spacing-md)', flexWrap: 'wrap' }}>
                                 <button
-                                    className={`btn ${adminView === 'dashboard' ? 'btn-primary' : 'btn-outline'}`}
+                                    className="nav-link"
+                                    style={{ color: adminView === 'dashboard' ? 'var(--color-primary)' : 'var(--color-text-secondary)', fontSize: 'var(--font-size-xs)', borderBottom: adminView === 'dashboard' ? '2px solid var(--color-primary)' : 'none' }}
                                     onClick={() => setAdminView('dashboard')}
                                 >
-                                    {language === 'fr' ? 'Tableau de Bord' : 'Dashboard'}
+                                    {(language === 'fr' ? 'Tableau de Bord' : 'Dashboard').toUpperCase()}
                                 </button>
                                 <button
-                                    className={`btn ${adminView === 'accessControl' ? 'btn-primary' : 'btn-outline'}`}
+                                    className="nav-link"
+                                    style={{ color: adminView === 'accessControl' ? 'var(--color-primary)' : 'var(--color-text-secondary)', fontSize: 'var(--font-size-xs)', borderBottom: adminView === 'accessControl' ? '2px solid var(--color-primary)' : 'none' }}
                                     onClick={() => setAdminView('accessControl')}
                                 >
-                                    {language === 'fr' ? 'Contrôle d\'Accès' : 'Access Control'}
+                                    {(language === 'fr' ? 'Contrôle d\'Accès' : 'Access Control').toUpperCase()}
                                 </button>
                             </div>
                         </div>
