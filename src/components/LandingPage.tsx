@@ -174,7 +174,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick, language }) => 
                             {text.project.content}
                         </p>
                         <div style={{ marginTop: '40px', paddingLeft: '20px', borderLeft: '8px solid #CC0000', fontWeight: 800, textTransform: 'uppercase', color: '#000' }}>
-                            Massoumbou, Littoral Region
+                            Massoumbou, NKAM Region
                         </div>
                     </div>
                 </div>
