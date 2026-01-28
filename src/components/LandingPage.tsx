@@ -137,7 +137,16 @@ const LandingPage: React.FC<LandingPageProps> = ({ onLoginClick, language }) => 
                         <h2 style={{ fontSize: 'var(--font-size-xs)', fontWeight: 900, color: '#CC0000', textTransform: 'uppercase', marginBottom: 'var(--spacing-md)', letterSpacing: '0.1em' }}>
                             {text.about.title}
                         </h2>
-                        <p style={{ fontSize: 'var(--font-size-3xl)', fontWeight: 800, lineHeight: 1.1, margin: '0 auto', textTransform: 'uppercase', maxWidth: '900px' }}>
+                        <p style={{
+                            fontSize: 'var(--font-size-3xl)',
+                            fontWeight: 600,
+                            lineHeight: 1.5,
+                            margin: '0 auto',
+                            textTransform: 'uppercase',
+                            maxWidth: '1000px',
+                            textAlign: 'justify',
+                            textAlignLast: 'center'
+                        }}>
                             {text.about.content}
                         </p>
                     </div>
