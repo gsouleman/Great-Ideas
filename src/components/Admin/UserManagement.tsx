@@ -10,7 +10,6 @@ interface UserManagementProps {
 
 export const UserManagement: React.FC<UserManagementProps> = ({ language }) => {
     const [users, setUsers] = useState<User[]>([]);
-    const [loading, setLoading] = useState(true);
     const [showForm, setShowForm] = useState(false);
     const [editingUser, setEditingUser] = useState<User | undefined>();
     const [searchTerm, setSearchTerm] = useState('');
@@ -18,13 +17,10 @@ export const UserManagement: React.FC<UserManagementProps> = ({ language }) => {
 
     const refreshUsers = async () => {
         try {
-            setLoading(true);
             const data = await adminApi.getUsers();
             setUsers(data);
         } catch (error) {
             console.error('Failed to load users:', error);
-        } finally {
-            setLoading(false);
         }
     };
 

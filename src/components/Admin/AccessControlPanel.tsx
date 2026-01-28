@@ -49,7 +49,7 @@ export const AccessControlPanel: React.FC<AccessControlPanelProps> = ({ language
 
         try {
             setSaving(true);
-            const updatedPermission = await adminApi.updatePermission({
+            await adminApi.updatePermission({
                 role: role.toUpperCase(),
                 module,
                 access: !currentAccess
